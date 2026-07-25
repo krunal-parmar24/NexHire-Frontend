@@ -1,46 +1,51 @@
-import axios from 'axios'
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080',
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8080",
   headers: {
-    'Content-Type': 'application/json'
-  }
-})
+    "Content-Type": "application/json",
+  },
+});
 
-let isRefreshing = false
-let refreshPromise: Promise<string | null> | null = null
+let isRefreshing = false;
+let refreshPromise: Promise<string | null> | null = null;
 
 api.interceptors.request.use(async (config) => {
-  const token = localStorage.getItem('accessToken')
+  const token = localStorage.getItem("accessToken");
   if (token && config.headers) {
-    config.headers['Authorization'] = `Bearer ${token}`
+    config.headers["Authorization"] = `Bearer ${token}`;
   }
-  return config
-})
+  return config;
+});
 
 api.interceptors.response.use(
   (res) => res,
   async (err) => {
-    const originalRequest = err.config
+    const originalRequest = err.config;
     if (err.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true
+      originalRequest._retry = true;
       if (!isRefreshing) {
-        isRefreshing = true
-        refreshPromise = api.post('/api/auth/refresh', { refreshToken: localStorage.getItem('refreshToken') })
-          .then(r => r.data.accessToken as string)
+        isRefreshing = true;
+        refreshPromise = api
+          .post("/api/auth/refresh", {
+            refreshToken: localStorage.getItem("refreshToken"),
+          })
+          .then((r) => r.data.accessToken as string)
           .catch(() => null)
-          .finally(() => { isRefreshing = false })
+          .finally(() => {
+            isRefreshing = false;
+          });
       }
 
-      const newAccess = await refreshPromise
+      const newAccess = await refreshPromise;
       if (newAccess) {
-        localStorage.setItem('accessToken', newAccess)
-        originalRequest.headers['Authorization'] = `Bearer ${newAccess}`
-        return api(originalRequest)
+        localStorage.setItem("accessToken", newAccess);
+        originalRequest.headers["Authorization"] = `Bearer ${newAccess}`;
+        return api(originalRequest);
       }
     }
-    return Promise.reject(err)
+    return Promise.reject(err);
   }
-)
+);
 
-export default api
+export default api;

@@ -1,0 +1,14 @@
+
+> nexhire-frontend@0.1.0 lint
+> eslint . --ext .ts,.tsx --max-warnings=0
+
+
+C:\Projects\NexHire\frontend\src\components\auth\RoleSelectionCards.tsx
+  11:14  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  16:14  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\Projects\NexHire\frontend\src\context\AuthContext.tsx
+  2:8  error  'axios' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 3 problems (3 errors, 0 warnings)
+

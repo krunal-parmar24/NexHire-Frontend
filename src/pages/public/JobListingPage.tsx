@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export default function JobListingPage() {
   return (
@@ -6,5 +6,5 @@ export default function JobListingPage() {
       <h1>Job Listings (stub)</h1>
       <p>This is a placeholder page for Day 1.</p>
     </div>
-  )
+  );
 }
