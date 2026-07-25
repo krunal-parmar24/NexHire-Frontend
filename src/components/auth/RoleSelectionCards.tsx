@@ -1,6 +1,4 @@
 import React from "react";
-import { Card } from "primereact/card";
-
 interface Props {
   selectedRole: "JobSeeker" | "Recruiter";
   onSelect: (role: "JobSeeker" | "Recruiter") => void;
@@ -26,7 +24,7 @@ export default function RoleSelectionCards({ selectedRole, onSelect }: Props) {
       >
         <div className="text-center p-4">
           <i className={`pi pi-users text-3xl mb-3 ${selectedRole === "Recruiter" ? "text-indigo-600" : "text-gray-500"}`}></i>
-          <h3 className="text-lg font-bold mb-1 text-gray-800">I'm hiring</h3>
+          <h3 className="text-lg font-bold mb-1 text-gray-800">I&apos;m hiring</h3>
           <p className="text-sm text-gray-500">Post jobs and manage applicants</p>
         </div>
       </div>

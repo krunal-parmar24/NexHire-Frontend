@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import RoleSelectionCards from "./RoleSelectionCards";
 import api from "../../api/axiosClient";
 import { useAuth } from "../../context/AuthContext";
@@ -30,6 +31,10 @@ export default function LoginRegisterModal({ visible = true, onHide = () => {} }
 
   const handleSuccess = (role: string, onboardingCompleted: boolean) => {
     onHide();
+    if (!onboardingCompleted) {
+      navigate("/auth/onboarding");
+      return;
+    }
     if (role === "JobSeeker") {
       navigate("/seeker/applications");
     } else {
@@ -49,8 +54,12 @@ export default function LoginRegisterModal({ visible = true, onHide = () => {} }
       const data = res.data;
       setTokens(data.accessToken, data.refreshToken, data.role, data.onboardingCompleted);
       handleSuccess(data.role, data.onboardingCompleted);
-    } catch (err: any) {
-      setError(err.response?.data?.error?.message || (typeof err.response?.data?.error === 'string' ? err.response.data.error : null) || err.message || "Demo login failed.");
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.error?.message || (typeof err.response?.data?.error === 'string' ? err.response.data.error : null) || err.message || "Demo login failed.");
+      } else {
+        setError("Demo login failed.");
+      }
     } finally {
       setLoading(false);
     }
@@ -75,8 +84,12 @@ export default function LoginRegisterModal({ visible = true, onHide = () => {} }
       const data = res.data;
       setTokens(data.accessToken, data.refreshToken, data.role, data.onboardingCompleted);
       handleSuccess(data.role, data.onboardingCompleted);
-    } catch (err: any) {
-      setError(err.response?.data?.error?.message || (typeof err.response?.data?.error === 'string' ? err.response.data.error : null) || err.message || "Registration failed. Please check your inputs.");
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.error?.message || (typeof err.response?.data?.error === 'string' ? err.response.data.error : null) || err.message || "Registration failed. Please check your inputs.");
+      } else {
+        setError("Registration failed. Please check your inputs.");
+      }
     } finally {
       setLoading(false);
     }
@@ -91,8 +104,12 @@ export default function LoginRegisterModal({ visible = true, onHide = () => {} }
       const data = res.data;
       setTokens(data.accessToken, data.refreshToken, data.role, data.onboardingCompleted);
       handleSuccess(data.role, data.onboardingCompleted);
-    } catch (err: any) {
-      setError(err.response?.data?.error?.message || (typeof err.response?.data?.error === 'string' ? err.response.data.error : null) || err.message || "Login failed. Invalid credentials.");
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.error?.message || (typeof err.response?.data?.error === 'string' ? err.response.data.error : null) || err.message || "Login failed. Invalid credentials.");
+      } else {
+        setError("Login failed. Invalid credentials.");
+      }
     } finally {
       setLoading(false);
     }
