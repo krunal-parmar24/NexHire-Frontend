@@ -1,0 +1,32 @@
+# Frontend-specific .gitignore for NexHire
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-lock.yaml
+
+# Vite / build
+dist/
+build/
+.vite/
+
+# Editor
+.vscode/
+.idea/
+
+# Environment
+.env
+.env.*.local
+.env.local
+
+# Logs
+*.log
+
+# Test / coverage
+coverage/
+*.lcov
+
+# Visual Studio
+.vs/
