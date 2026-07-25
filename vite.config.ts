@@ -11,5 +11,10 @@ export default defineConfig({
       // in Vite's fs watcher. Exclude it along with other non-source dirs.
       ignored: ['**/.vs/**', '**/node_modules/**', '**/dist/**']
     }
+  },
+  test: {
+    // Don't fail CI on days where no test files exist yet; real test
+    // suites are added incrementally per the Implementation Plan.
+    passWithNoTests: true
   }
 })
