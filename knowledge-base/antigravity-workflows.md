@@ -12,12 +12,12 @@ Use this when adding a page that does not yet exist (e.g., a new recruiter view,
 
 Open [`08-frontend-folder-structure.md`](08-frontend-folder-structure.md). Determine which route group owns the new page:
 
-| Group | File | Who sees it |
-|---|---|---|
-| `Public` | `routes/PublicRoutes.tsx` | Unauthenticated guests |
-| `Auth` | `routes/AuthRoutes.tsx` | Login / register modal |
+| Group       | File                         | Who sees it               |
+| ----------- | ---------------------------- | ------------------------- |
+| `Public`    | `routes/PublicRoutes.tsx`    | Unauthenticated guests    |
+| `Auth`      | `routes/AuthRoutes.tsx`      | Login / register modal    |
 | `JobSeeker` | `routes/JobSeekerRoutes.tsx` | Authenticated job seekers |
-| `Recruiter` | `routes/RecruiterRoutes.tsx` | Authenticated recruiters |
+| `Recruiter` | `routes/RecruiterRoutes.tsx` | Authenticated recruiters  |
 
 ### Step 2 — Check the implementation plan
 
@@ -86,6 +86,7 @@ Use this when adding or modifying any component that renders, previews, or submi
 ### Step 1 — Read the contract
 
 Open [`04-dynamic-screening-form.md`](04-dynamic-screening-form.md). Internalize:
+
 - The question definition shape: `{ id, label, type, required }`
 - The answer shape: `{ questionId, value }`
 - The 6 field types: `text | single-select | multi-select | file upload | yes/no | numeric`
@@ -98,12 +99,12 @@ Open `frontend/src/types/screeningQuestion.ts`. Confirm the discriminated union 
 ```ts
 // frontend/src/types/screeningQuestion.ts
 export type ScreeningQuestionType =
-  | 'text'
-  | 'single-select'
-  | 'multi-select'
-  | 'file upload'
-  | 'yes/no'
-  | 'numeric';
+  | "text"
+  | "single-select"
+  | "multi-select"
+  | "file upload"
+  | "yes/no"
+  | "numeric";
 
 export interface ScreeningQuestion {
   id: string;
@@ -125,19 +126,29 @@ Open `frontend/src/components/forms/DynamicFormRenderer.tsx`. Understand its exi
 
 ```tsx
 type DynamicFormRendererProps =
-  | { mode: 'builder'; questions: ScreeningQuestion[]; onChange: (questions: ScreeningQuestion[]) => void }
-  | { mode: 'preview'; questions: ScreeningQuestion[] }
-  | { mode: 'fill';   questions: ScreeningQuestion[]; onSubmit: (answers: ScreeningAnswer[]) => void };
+  | {
+      mode: "builder";
+      questions: ScreeningQuestion[];
+      onChange: (questions: ScreeningQuestion[]) => void;
+    }
+  | { mode: "preview"; questions: ScreeningQuestion[] }
+  | {
+      mode: "fill";
+      questions: ScreeningQuestion[];
+      onSubmit: (answers: ScreeningAnswer[]) => void;
+    };
 ```
 
 ### Step 4 — Add or modify the component
 
 If adding a **new field type** to the renderer:
+
 1. Add the new type string to the `ScreeningQuestionType` union in `screeningQuestion.ts`.
 2. Add a case to the type-switch inside `DynamicFormRenderer.tsx`.
 3. **Alert the backend team** — a new field type is a cross-cutting contract change (see Non-Negotiable Rule 2 in [`../AGENTS.md`](../../AGENTS.md)).
 
 If building a **new component that wraps the renderer** (e.g., `ScreeningFormPreviewModal.tsx`):
+
 - Pass `mode="preview"` and the job's `screeningQuestions` array — do not re-implement rendering logic.
 - Place the new component in `frontend/src/components/recruiter/` or the appropriate subdirectory per the folder structure.
 
@@ -162,6 +173,7 @@ Use this when a page or component needs server state that is not yet fetched by 
 ### Step 1 — Confirm the endpoint exists
 
 Open [`14-api-contracts-frontend.md`](14-api-contracts-frontend.md). Find the endpoint. Confirm:
+
 - The HTTP method and path.
 - The exact request shape (query params, body).
 - The exact response shape.
@@ -175,11 +187,13 @@ Open the appropriate file under `frontend/src/api/endpoints/` (`auth.ts`, `jobs.
 
 ```ts
 // Example: frontend/src/api/endpoints/jobs.ts
-import axiosClient from '../axiosClient';
-import { MatchScoreResponse } from '../../types/matchScore';
+import axiosClient from "../axiosClient";
+import { MatchScoreResponse } from "../../types/matchScore";
 
 export const fetchMatchScore = (jobId: string): Promise<MatchScoreResponse> =>
-  axiosClient.get<MatchScoreResponse>(`/api/jobs/${jobId}/match-score`).then(r => r.data);
+  axiosClient
+    .get<MatchScoreResponse>(`/api/jobs/${jobId}/match-score`)
+    .then((r) => r.data);
 ```
 
 Mirror the response type from the contracts file under `frontend/src/types/` (one interface per response shape).
@@ -192,12 +206,12 @@ Create `frontend/src/queries/use<Resource><Action>.ts`. Naming convention: `useJ
 
 ```ts
 // frontend/src/queries/useMatchScoreQuery.ts
-import { useQuery } from '@tanstack/react-query';
-import { fetchMatchScore } from '../api/endpoints/jobs';
+import { useQuery } from "@tanstack/react-query";
+import { fetchMatchScore } from "../api/endpoints/jobs";
 
 export const useMatchScoreQuery = (jobId: string) =>
   useQuery({
-    queryKey: ['matchScore', jobId],
+    queryKey: ["matchScore", jobId],
     queryFn: () => fetchMatchScore(jobId),
     enabled: !!jobId,
   });
@@ -207,15 +221,15 @@ export const useMatchScoreQuery = (jobId: string) =>
 
 ```ts
 // frontend/src/queries/useWithdrawMutation.ts
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { withdrawApplication } from '../api/endpoints/applications';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { withdrawApplication } from "../api/endpoints/applications";
 
 export const useWithdrawMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (applicationId: string) => withdrawApplication(applicationId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myApplications'] });
+      queryClient.invalidateQueries({ queryKey: ["myApplications"] });
     },
   });
 };

@@ -31,61 +31,75 @@ The UI must visibly showcase the Agentic AI differentiators that are the project
 ## 4. Screen-by-Screen Reference
 
 ### 4.1 Job Listing Page (Guest)
+
 - Filter sidebar (keyword, location, job type, remote/hybrid/onsite) on the left; job card grid on the right.
 - Each job card: title, company, location, job type tag, remote-type tag, "Apply"/"Save" buttons (visible but gated).
 
 ### 4.2 Job Detail Page
+
 - Header: title, company logo, location, job type/remote tags, Match Score badge (authenticated Job Seeker only; hidden for guests).
 - Body: description, requirements.
 - Sticky action bar: Apply / Save / Message Recruiter (gated behind login modal for guests).
 
 ### 4.3 Login/Register Modal
+
 - Two-tab modal (Login / Register), opened in-context over the current page — never a full-page redirect.
 - Register tab: role-selection as two large selectable cards ("I'm hiring" / "I'm looking for a job"), not a dropdown.
 - Includes Quick Demo Login buttons (one per role) for reviewer convenience.
 
 ### 4.4 Onboarding Wizard
+
 - Multi-step wizard with a progress indicator (step 1 of N); cannot be dismissed or skipped (hard-wall).
 - Resume upload step includes a drag-and-drop zone with file-size/type validation feedback and an "auto-filling your profile..." loading state during parse.
 
 ### 4.5 Job Seeker Dashboard / My Applications
+
 - Table/list of applications: job title, company, status tag (color-coded), submitted date, withdraw action (only shown pre-final-decision).
 
 ### 4.6 Dynamic Application Form
+
 - Rendered by the shared `DynamicFormRenderer`; one field type per screening question (text/select/multi-select/file/yes-no/numeric), required fields marked with an asterisk.
 - "Autofill with AI" button above the form, opening the Review Card flow.
 
 ### 4.7 Review Card (Autofill)
+
 - Card-per-question layout; each field shows the pre-filled value with an inline edit icon; modified fields show a "Save to profile" toggle.
 - Persistent AI disclaimer directly below the card, above the "Confirm & Submit Application" button (disabled until reviewed).
 
 ### 4.8 Recruiter Dashboard Home
+
 - Four summary cards: Active Postings, Total Applicants, Pending Review, Verification Badge.
 - Quick-link rail: Post New Job, View Applicants (per job), Edit Company Profile.
 
 ### 4.9 Job Posting Wizard + Screening Question Builder
+
 - Left panel: job detail fields (Title, Description, Requirements, Location, Job Type, Salary Range, Remote Type) with an "AI-generate description" button opening the JD Draft Editor.
 - Right panel: screening question builder — add/reorder questions, choose field type via a type selector, mark Mandatory/Optional, one-click preset library.
 - "Preview as Job Seeker" button opens the exact seeker-side rendering in a modal.
 
 ### 4.10 Applicant Management (Table/Kanban)
+
 - Toggle between table view and kanban view (columns = pipeline stages: Applied/Shortlisted/Interview/Rejected/Hired, plus a Withdrawn filter/tag).
 - Row/card click opens applicant detail (answers, resume link, profile summary) with a status-change dropdown.
 - Candidate Screening suggestion panel appears as a non-mutating sidebar/banner ("AI suggests: rank #1 — strong match") with the AI disclaimer attached.
 
 ### 4.11 Chat Page
+
 - Full-page layout; message bubbles for user turns, a distinct "reasoning trace" visual style (e.g., collapsible/streaming monospace-adjacent block) for agent thinking steps, then a final structured result (job cards, draft answers, etc.) rendered inline.
 - Input box disabled while a request is in-flight, with a subtle loading indicator communicating the single-in-flight-request rule.
 - Persistent disclaimer footer, always visible.
 
 ### 4.12 Bulk Apply Review Screen
+
 - List of eligible jobs (ATS ≥ 80%) with score badges; single "Confirm Bulk Apply (N jobs)" button at the bottom — no per-job confirmation.
 
 ### 4.13 Credit Meter & Upgrade Prompt
+
 - Small persistent widget (e.g., in top nav): "350 / 500 credits" with a progress bar; color shifts toward Warning as balance approaches zero.
 - On a blocked AI action: a modal/toast with "Coming Soon" upgrade messaging, not a dead-end error.
 
 ### 4.14 Notification Center
+
 - Bell icon with unread-count badge in top nav; dropdown/panel listing notifications with type icon, message, timestamp, read/unread state.
 
 ## 5. Shared Component States

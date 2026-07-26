@@ -12,13 +12,13 @@
 
 The frontend does not implement tool logic, but the chat UI must correctly render the outcome of each tool and its credit cost as returned by the backend:
 
-| Agent / Tool | Credit Cost | What the Frontend Renders |
-|---|---|---|
-| Job Search & Match Agent | 5 | Ranked job list with Match Score badges |
-| Application Autofill Agent | 10 | Review Card flow (see §4 below) |
-| Application Status Tool | 2 | Current pipeline stage, inline in chat |
-| Bulk Apply Agent | 10/app | Bulk Apply batch review screen |
-| JD Generation Agent (Recruiter) | 15 | JD draft editor (editable, not auto-published) |
+| Agent / Tool                          | Credit Cost | What the Frontend Renders                           |
+| ------------------------------------- | ----------- | --------------------------------------------------- |
+| Job Search & Match Agent              | 5           | Ranked job list with Match Score badges             |
+| Application Autofill Agent            | 10          | Review Card flow (see §4 below)                     |
+| Application Status Tool               | 2           | Current pipeline stage, inline in chat              |
+| Bulk Apply Agent                      | 10/app      | Bulk Apply batch review screen                      |
+| JD Generation Agent (Recruiter)       | 15          | JD draft editor (editable, not auto-published)      |
 | Candidate Screening Agent (Recruiter) | 5/candidate | Candidate Screening suggestion panel (non-mutating) |
 
 ## 3. Human-in-the-Loop (HITL) Guardrail
@@ -43,7 +43,7 @@ The Application Autofill Agent's four phases and what the frontend must do at ea
 
 ## 6. AI Disclaimer — Responsible AI Notice
 
-- A persistent, visible disclaimer must accompany **all** AI-generated output: e.g., *"This response is AI-generated and may contain mistakes. Please double-check before relying on it."*
+- A persistent, visible disclaimer must accompany **all** AI-generated output: e.g., _"This response is AI-generated and may contain mistakes. Please double-check before relying on it."_
 - **Applies to:** chatbot responses, AI-drafted application answers, AI-generated job descriptions, AI-generated company descriptions, and AI match/ranking explanations.
 - **Placement:** persistently in the chatbot UI footer, **and** inline near any AI-drafted content the user is asked to review/confirm before submission (autofilled answers, generated JD, screening suggestions).
 - Build this as a single shared `AiDisclaimerBanner` component reused everywhere AI output appears — never a one-off per screen.

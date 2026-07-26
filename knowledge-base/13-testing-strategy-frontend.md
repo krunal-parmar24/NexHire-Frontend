@@ -13,11 +13,13 @@
 Each item below is UI-observable — states, forms, flows a person can click through in the browser (as opposed to Postman/API-level checks, which live in the Backend knowledge base).
 
 ### Day 1 — Auth Foundations
+
 - [ ] Register a new Job Seeker account via the UI; confirm role is permanently set (no way to change it afterward in the UI)
 - [ ] Register a new Recruiter account via the UI; confirm role is permanently set
 - [ ] Log in with valid credentials; confirm the frontend stores and attaches the JWT on subsequent requests
 
 ### Day 2 — Onboarding & Resume Parsing
+
 - [ ] New user is blocked from all navigation until onboarding is submitted
 - [ ] Upload a sample PDF resume under 1MB; confirm ≥5 profile fields auto-fill correctly in the wizard
 - [ ] Upload a sample DOCX resume under 1MB; confirm extraction works and fields populate
@@ -25,40 +27,47 @@ Each item below is UI-observable — states, forms, flows a person can click thr
 - [ ] Confirm the credit meter does not change after a resume parse (0-credit rule)
 
 ### Day 3 — Guest Browsing & Search
+
 - [ ] Guest (no auth) can view job listings and job detail pages
 - [ ] Keyword, location, job type, and remote/hybrid/onsite filters all work in the UI
 - [ ] Clicking Apply/Save/Message as a guest opens the login modal, preserving job context
 
 ### Day 4 — Recruiter Job Posting & Screening Builder
+
 - [ ] Recruiter creates a job posting with all required fields via the UI
 - [ ] Job posting builder supports all 6 screening-question field types
 - [ ] Preview mode matches the seeker-side renderer exactly (visual + behavioral parity)
 - [ ] Job posting state transitions (Draft→Active→Closed/Expired) are reflected correctly in the UI
 
 ### Day 5 — Dynamic Application Form & Submission Rules
+
 - [ ] Job Seeker completes and submits a dynamic application form via the UI
 - [ ] Duplicate application attempt shows the specific "already applied" message, not a generic error
 - [ ] Withdraw action is shown/works before Hired/Rejected; hidden/blocked after
 - [ ] Withdrawn application remains visible to the recruiter in the Applicant Management UI (not hidden)
 
 ### Day 6 — Applicant Management & Recruiter Dashboard
+
 - [ ] Recruiter views applicant list with answers, resume link, and profile summary rendered correctly
 - [ ] Status transitions (Applied→Shortlisted→Interview→Rejected/Hired) work via the UI and persist on refresh
 - [ ] Recruiter dashboard counts (active postings, total applicants, pending review) match backend truth
 - [ ] Recruiter UI only ever shows applicants for jobs they personally posted
 
 ### Day 7 — ATS Match Scoring Engine (Display)
+
 - [ ] Match Score badge renders the correct overall percentage and pillar breakdown tooltip
 - [ ] Badge correctly reflects `certificationWeightRedistributed` cases in its breakdown
 - [ ] Match Score badge is hidden for guest users
 
 ### Day 8 — Agent Framework, Chat Shell & First 2 Tools
+
 - [ ] Chat prompt "find me jobs matching my profile" returns a ranked result list with a streamed reasoning trace visible in the UI
 - [ ] A single in-flight request is enforced — sending a second message while one is processing is blocked in the UI (input disabled)
 - [ ] Rate limit condition triggers the "AI Busy" UI message without changing the credit meter
 - [ ] Failed AI calls show an inline error without changing the credit meter
 
 ### Day 9 — Autofill Loop, Bulk Apply, JD Generation (UI)
+
 - [ ] Autofill on a job with an unmapped required question triggers the Interactive Pause-and-Prompt UI
 - [ ] All pre-filled/prompted answers are editable in the Review Card before submission
 - [ ] "Save to profile" toggle correctly reflects the intent to persist an edited value
@@ -68,18 +77,21 @@ Each item below is UI-observable — states, forms, flows a person can click thr
 - [ ] JD Generation output requires manual edit/review in the UI before the "Publish" action is enabled
 
 ### Day 10 — Status Tool, Candidate Screening, Notifications (UI)
+
 - [ ] Chat query "what's my application status" returns a correct, live pipeline stage in the chat UI
 - [ ] Candidate Screening suggestion panel never auto-changes an applicant's status
 - [ ] Notification UI fires/updates for: new applicant received, application status changed, verification approved
 - [ ] All 6 agent tools are invokable from the chat UI with the correct credit cost shown
 
 ### Day 11 — AI Disclaimer, Admin Verification, Profile Editing (UI)
+
 - [ ] AI disclaimer is visible on every AI output surface (chat footer, autofill review, JD draft, match explanations) without exception
 - [ ] Resume re-upload on profile edit triggers the same free re-parse UI flow (0-credit)
 - [ ] Changing a company's name in the UI reflects a reset to "Pending Review"/"Unverified" badge state after save
 - [ ] Admin mini-panel can approve/reject a recruiter's verification request
 
 ### Day 12 — Hardening (Frontend UI States)
+
 - [ ] Zero AI credit balance shows the "Coming Soon" upgrade prompt; manual search/apply flows remain fully usable
 - [ ] Platform rate-limit exhaustion shows "AI Busy" without any credit-meter change
 - [ ] No unhandled exception/blank screen appears anywhere in a full manual walkthrough of guest, seeker, recruiter, and AI flows
@@ -87,6 +99,7 @@ Each item below is UI-observable — states, forms, flows a person can click thr
 - [ ] Confirm no secrets appear in the browser console, network tab, or bundled JS
 
 ### Day 13 — Deployment & E2E Integration
+
 - [ ] Full guest→apply→login→onboarding→AI autofill→submit journey works on the production Render URL
 - [ ] Full recruiter post→screen(AI)→manage→hire journey works on the production Render URL
 - [ ] Quick Demo Login works for both roles in production
@@ -94,6 +107,7 @@ Each item below is UI-observable — states, forms, flows a person can click thr
 - [ ] No console errors during the full walkthrough
 
 ### Day 14 — Final Polish & Demo Readiness
+
 - [ ] Full regression pass against every frontend-relevant row in Section 3 below
 - [ ] Demo script covering all 6 tools + HITL confirmations + disclaimer visibility runs without failure in the UI
 

@@ -245,9 +245,10 @@ export default function JobDetailPage() {
                   <h2 className="text-xl font-extrabold text-slate-900 mb-5">
                     About the Role
                   </h2>
-                  <div className="text-slate-600 leading-[1.8] text-[1.05rem] whitespace-pre-wrap font-medium">
-                    {job.description}
-                  </div>
+                  <div
+                    className="text-slate-600 leading-[1.8] text-[1.05rem] font-medium tiptap-content ProseMirror"
+                    dangerouslySetInnerHTML={{ __html: job.description }}
+                  />
                 </div>
 
                 <div className="h-px bg-slate-100 w-full"></div>
@@ -256,9 +257,10 @@ export default function JobDetailPage() {
                   <h2 className="text-xl font-extrabold text-slate-900 mb-5">
                     Requirements
                   </h2>
-                  <div className="text-slate-600 leading-[1.8] text-[1.05rem] whitespace-pre-wrap font-medium">
-                    {job.requirements}
-                  </div>
+                  <div
+                    className="text-slate-600 leading-[1.8] text-[1.05rem] font-medium tiptap-content ProseMirror"
+                    dangerouslySetInnerHTML={{ __html: job.requirements }}
+                  />
                 </div>
               </section>
             </div>

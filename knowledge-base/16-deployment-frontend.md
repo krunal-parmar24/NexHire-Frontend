@@ -27,19 +27,19 @@ CMD ["nginx", "-g", "daemon off;"]
 
 ## 2. Render Service (Frontend)
 
-| Setting | Value |
-|---|---|
+| Setting       | Value                                                                                   |
+| ------------- | --------------------------------------------------------------------------------------- |
 | Deploy method | Existing Image / Docker Registry (Render pulls from GHCR — it never builds from source) |
-| Image URL | `ghcr.io/<owner>/<repo>-frontend:latest` |
-| Port | `80` (matches Nginx Dockerfile `EXPOSE`) |
-| Environment | `VITE_API_BASE_URL` pointing to the deployed backend service |
+| Image URL     | `ghcr.io/<owner>/<repo>-frontend:latest`                                                |
+| Port          | `80` (matches Nginx Dockerfile `EXPOSE`)                                                |
+| Environment   | `VITE_API_BASE_URL` pointing to the deployed backend service                            |
 
 CI (GitHub Actions) builds and pushes this image to GHCR on every push to `main` under the `frontend/**` path filter, then triggers this Render service's Deploy Hook. The frontend repo does not need its own copy of the GitHub Actions workflow logic — it only needs the `Dockerfile`, `nginx.conf`, and this environment variable configured in Render.
 
 ## 3. Environment Variable
 
-| Variable | Location | Purpose |
-|---|---|---|
+| Variable            | Location                        | Purpose                                                          |
+| ------------------- | ------------------------------- | ---------------------------------------------------------------- |
 | `VITE_API_BASE_URL` | Render frontend service env var | Points the built frontend bundle to the deployed backend API URL |
 
 No other secret or environment variable belongs in the frontend service — `LLM_API_KEY`, `JWT_SIGNING_SECRET`, database, and Redis configuration are backend-only concerns (see Backend KB).

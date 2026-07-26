@@ -10,12 +10,12 @@ This project is a **portfolio-grade demonstration**, not an enterprise productio
 
 ## 2. User-Facing Performance Targets
 
-| Interaction | Target | Notes |
-|---|---|---|
-| Guest job listing page load | < 1.5s | Must remain fast since guest browsing/SEO is a P0 feature |
-| Job detail page load | < 1s | |
-| Login / Register | < 1s | Excludes onboarding wizard steps |
-| Agent chat first-token latency (perceived) | < 3s | Streaming should visibly begin before the full response completes — build the reasoning-trace renderer to reflect partial content as soon as it arrives, not wait for a complete payload |
+| Interaction                                | Target | Notes                                                                                                                                                                                    |
+| ------------------------------------------ | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Guest job listing page load                | < 1.5s | Must remain fast since guest browsing/SEO is a P0 feature                                                                                                                                |
+| Job detail page load                       | < 1s   |                                                                                                                                                                                          |
+| Login / Register                           | < 1s   | Excludes onboarding wizard steps                                                                                                                                                         |
+| Agent chat first-token latency (perceived) | < 3s   | Streaming should visibly begin before the full response completes — build the reasoning-trace renderer to reflect partial content as soon as it arrives, not wait for a complete payload |
 
 > Actual latency for AI-dependent operations is bounded by the backend's LLM provider and rate limits — the frontend's job is to communicate progress (loading skeletons, streaming indicators) rather than to hide latency.
 

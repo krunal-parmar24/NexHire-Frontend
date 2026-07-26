@@ -40,6 +40,15 @@ export default function PublicHeader() {
               {role === "JobSeeker" ? "Job Seeker" : "Recruiter"}
             </span>
 
+            {role === "Recruiter" && (
+              <Button
+                onClick={() => navigate("/recruiter/jobs/new")}
+                label="Post a Job"
+                icon="pi pi-plus"
+                className="p-button-sm !bg-indigo-600 hover:!bg-indigo-700 !border-none text-white rounded-xl font-bold shadow-md shadow-indigo-600/20"
+              />
+            )}
+
             <Button
               onClick={handleDashboardRedirect}
               label="Dashboard"
