@@ -60,6 +60,11 @@ Git/commit conventions are **shared and authoritative in the Backend knowledge b
 - Scope matches the frontend task area (e.g., `feat(onboarding): add resume upload widget`).
 - Reference the Implementation Plan Day number in the PR description (e.g., "Implements Day 5 — Dynamic Application Form & Submission Rules (Frontend)").
 
+## 10. Task Completion Standards
+
+- After completing all changes, ensure the project passes all **type-check** and **lint** validations without errors.
+- Run **Prettier** to automatically format the codebase and resolve any formatting issues before marking the task as complete.
+
 ## Implementation Checklist
 
 - [ ] Enable TypeScript `strict: true` in `tsconfig.json`

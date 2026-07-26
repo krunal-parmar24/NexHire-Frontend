@@ -14,7 +14,12 @@ export default function OnboardingGuard({ children }: OnboardingGuardProps) {
   }
 
   if (onboardingCompleted) {
-    return <Navigate to={role === "Recruiter" ? "/recruiter" : "/seeker/applications"} replace />;
+    return (
+      <Navigate
+        to={role === "Recruiter" ? "/recruiter" : "/seeker/applications"}
+        replace
+      />
+    );
   }
 
   return <>{children}</>;

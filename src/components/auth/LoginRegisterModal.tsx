@@ -21,7 +21,9 @@ export default function LoginRegisterModal({
   onHide = () => {},
 }: Props) {
   const [tab, setTab] = useState<"login" | "register">("login");
-  const [selectedRole, setSelectedRole] = useState<"JobSeeker" | "Recruiter">("JobSeeker");
+  const [selectedRole, setSelectedRole] = useState<"JobSeeker" | "Recruiter">(
+    "JobSeeker"
+  );
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -49,18 +51,31 @@ export default function LoginRegisterModal({
     try {
       setLoading(true);
       setError(null);
-      const demoEmail = role === "JobSeeker" ? "demo.seeker@example.com" : "demo.recruiter@example.com";
-      const res = await api.post("/api/auth/login", { email: demoEmail, password: "Password123!" });
+      const demoEmail =
+        role === "JobSeeker"
+          ? "demo.seeker@example.com"
+          : "demo.recruiter@example.com";
+      const res = await api.post("/api/auth/login", {
+        email: demoEmail,
+        password: "Password123!",
+      });
       const data = res.data;
-      setTokens(data.accessToken, data.refreshToken, data.role, data.onboardingCompleted);
+      setTokens(
+        data.accessToken,
+        data.refreshToken,
+        data.role,
+        data.onboardingCompleted
+      );
       handleSuccess(data.role, data.onboardingCompleted);
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setError(
           err.response?.data?.error?.message ||
-          (typeof err.response?.data?.error === "string" ? err.response.data.error : null) ||
-          err.message ||
-          "Demo login failed."
+            (typeof err.response?.data?.error === "string"
+              ? err.response.data.error
+              : null) ||
+            err.message ||
+            "Demo login failed."
         );
       } else {
         setError("Demo login failed.");
@@ -79,18 +94,30 @@ export default function LoginRegisterModal({
     try {
       setLoading(true);
       setError(null);
-      await api.post("/api/auth/register", { email, password, role: selectedRole, acceptedTerms });
+      await api.post("/api/auth/register", {
+        email,
+        password,
+        role: selectedRole,
+        acceptedTerms,
+      });
       const res = await api.post("/api/auth/login", { email, password });
       const data = res.data;
-      setTokens(data.accessToken, data.refreshToken, data.role, data.onboardingCompleted);
+      setTokens(
+        data.accessToken,
+        data.refreshToken,
+        data.role,
+        data.onboardingCompleted
+      );
       handleSuccess(data.role, data.onboardingCompleted);
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setError(
           err.response?.data?.error?.message ||
-          (typeof err.response?.data?.error === "string" ? err.response.data.error : null) ||
-          err.message ||
-          "Registration failed. Please check your inputs."
+            (typeof err.response?.data?.error === "string"
+              ? err.response.data.error
+              : null) ||
+            err.message ||
+            "Registration failed. Please check your inputs."
         );
       } else {
         setError("Registration failed. Please check your inputs.");
@@ -107,15 +134,22 @@ export default function LoginRegisterModal({
       setError(null);
       const res = await api.post("/api/auth/login", { email, password });
       const data = res.data;
-      setTokens(data.accessToken, data.refreshToken, data.role, data.onboardingCompleted);
+      setTokens(
+        data.accessToken,
+        data.refreshToken,
+        data.role,
+        data.onboardingCompleted
+      );
       handleSuccess(data.role, data.onboardingCompleted);
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setError(
           err.response?.data?.error?.message ||
-          (typeof err.response?.data?.error === "string" ? err.response.data.error : null) ||
-          err.message ||
-          "Login failed. Invalid credentials."
+            (typeof err.response?.data?.error === "string"
+              ? err.response.data.error
+              : null) ||
+            err.message ||
+            "Login failed. Invalid credentials."
         );
       } else {
         setError("Login failed. Invalid credentials.");
@@ -136,27 +170,27 @@ export default function LoginRegisterModal({
       maskClassName="bg-black/50 backdrop-blur-sm"
     >
       <div className="flex flex-col md:flex-row w-full max-h-[90vh] overflow-hidden">
-        
         {/* Left Side: Branding Panel (Hidden on Mobile) */}
         <div className="hidden md:flex md:w-[45%] !bg-gradient-to-br !from-[#2563EB] !to-[#4F46E5] p-12 flex-col justify-center items-center text-white relative overflow-hidden">
           {/* Decorative background elements */}
           <div className="absolute -top-32 -right-32 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl pointer-events-none"></div>
           <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-slate-900 opacity-20 rounded-full blur-3xl pointer-events-none"></div>
-          
+
           <div className="relative z-10 flex flex-col items-center justify-center gap-12 w-full">
-            <img 
-              src="/logo.png" 
-              alt="NexHire Logo" 
-              className="h-40 md:h-56 object-contain pointer-events-none transform transition-transform hover:scale-105 duration-500" 
-              style={{ filter: "brightness(0) invert(1)" }} 
+            <img
+              src="/logo.png"
+              alt="NexHire Logo"
+              className="h-40 md:h-56 object-contain pointer-events-none transform transition-transform hover:scale-105 duration-500"
+              style={{ filter: "brightness(0) invert(1)" }}
             />
-            
+
             <div className="text-center w-full">
               <h2 className="text-3xl md:text-4xl font-extrabold mb-6 leading-tight tracking-tight drop-shadow-sm">
                 Your next career <br /> move starts here.
               </h2>
               <p className="text-indigo-100/90 text-lg leading-relaxed max-w-sm mx-auto">
-                Join the AI-powered platform connecting top talent with industry-leading recruiters instantly.
+                Join the AI-powered platform connecting top talent with
+                industry-leading recruiters instantly.
               </p>
             </div>
           </div>
@@ -200,7 +234,11 @@ export default function LoginRegisterModal({
             <div className="text-center mb-10">
               {/* Logo for mobile only */}
               <div className="md:hidden flex justify-center mb-6 pointer-events-none">
-                <img src="/logo.png" alt="NexHire Logo" className="h-36 object-contain -mt-4 -mb-4" />
+                <img
+                  src="/logo.png"
+                  alt="NexHire Logo"
+                  className="h-36 object-contain -mt-4 -mb-4"
+                />
               </div>
               <h2 className="text-3xl font-extrabold text-[#0F172A] tracking-tight">
                 {tab === "login" ? "Welcome back" : "Create an account"}

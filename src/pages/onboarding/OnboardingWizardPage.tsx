@@ -8,11 +8,7 @@ export default function OnboardingWizardPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4 md:p-8">
-      {role === "JobSeeker" ? (
-        <JobSeekerWizard />
-      ) : (
-        <RecruiterWizard />
-      )}
+      {role === "JobSeeker" ? <JobSeekerWizard /> : <RecruiterWizard />}
     </div>
   );
 }

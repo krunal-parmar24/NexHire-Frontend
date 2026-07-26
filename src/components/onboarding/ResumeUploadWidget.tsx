@@ -1,11 +1,16 @@
 import React, { useState } from "react";
-import { useParseResumeMutation, ParsedFields } from "../../api/hooks/useOnboarding";
+import {
+  useParseResumeMutation,
+  ParsedFields,
+} from "../../api/hooks/useOnboarding";
 
 interface ResumeUploadWidgetProps {
   onParseSuccess: (parsedData: ParsedFields) => void;
 }
 
-export default function ResumeUploadWidget({ onParseSuccess }: ResumeUploadWidgetProps) {
+export default function ResumeUploadWidget({
+  onParseSuccess,
+}: ResumeUploadWidgetProps) {
   const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const parseMutation = useParseResumeMutation();
@@ -44,8 +49,8 @@ export default function ResumeUploadWidget({ onParseSuccess }: ResumeUploadWidge
       setError("File exceeds 1MB limit.");
       return;
     }
-    const ext = file.name.split('.').pop()?.toLowerCase();
-    if (ext !== 'pdf' && ext !== 'docx') {
+    const ext = file.name.split(".").pop()?.toLowerCase();
+    if (ext !== "pdf" && ext !== "docx") {
       setError("Only PDF or DOCX files are supported.");
       return;
     }
@@ -90,12 +95,18 @@ export default function ResumeUploadWidget({ onParseSuccess }: ResumeUploadWidge
             <i className="pi pi-cloud-upload text-4xl text-brand-purple opacity-80"></i>
             <p className="text-gray-700 font-medium text-center">
               Drag & Drop your resume <br />
-              <span className="text-sm text-gray-500 font-normal">or click to browse (PDF/DOCX max 1MB)</span>
+              <span className="text-sm text-gray-500 font-normal">
+                or click to browse (PDF/DOCX max 1MB)
+              </span>
             </p>
           </div>
         )}
       </div>
-      {error && <p className="mt-2 text-red-500 text-sm font-medium text-center">{error}</p>}
+      {error && (
+        <p className="mt-2 text-red-500 text-sm font-medium text-center">
+          {error}
+        </p>
+      )}
     </div>
   );
 }
