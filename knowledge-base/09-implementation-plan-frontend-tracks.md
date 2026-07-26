@@ -20,9 +20,9 @@
 - **DoD:** onboarding blocks all navigation until submitted; resume parse populates ≥5 profile fields correctly on a sample resume.
 
 ## Day 3 — Guest Browsing, Search & Job Listings
-- Build job listing page (guest-accessible), job detail page, filter sidebar.
-- Add SEO-friendly meta tags / crawlable content.
-- Build gated Apply/Save/Message buttons (visible to guests, trigger login modal).
+- [x] Build job listing page (guest-accessible), job detail page, filter sidebar.
+- [x] Add SEO-friendly meta tags / crawlable content.
+- [x] Build gated Apply/Save/Message buttons (visible to guests, trigger login modal).
 - **Deliverable:** public job board live with search/filter.
 - **DoD:** guest sees jobs, filters work, restricted actions open login modal preserving job context.
 

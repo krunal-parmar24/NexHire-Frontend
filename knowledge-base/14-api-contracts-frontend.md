@@ -119,6 +119,19 @@ No auth header required — guest-accessible.
 ```
 No auth header required — guest-accessible.
 
+### `GET /api/jobs/saved` (Job Seeker, auth required)
+```json
+// Expect (200) — returns list of job IDs the authenticated user has saved
+[ "j1...", "j2..." ]
+```
+
+### `POST /api/jobs/{id}/save` (Job Seeker, auth required)
+```json
+// Send: {}
+// Expect (200) — toggles the saved state
+{ "isSaved": true }
+```
+
 ### `POST /api/jobs` (Recruiter, auth required)
 ```json
 // Send
