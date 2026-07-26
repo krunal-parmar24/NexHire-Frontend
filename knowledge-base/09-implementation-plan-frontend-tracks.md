@@ -13,9 +13,9 @@
 - **DoD:** frontend stores/attaches JWT correctly after login/register.
 
 ## Day 2 — Onboarding Hard-Wall & Resume Parsing
-- Build multi-step onboarding wizard (Job Seeker & Recruiter variants).
-- Build resume upload widget (max 1MB client-side check) + auto-fill review UI.
-- Build onboarding hard-wall route guard blocking all navigation until complete.
+- [x] Build multi-step onboarding wizard (Job Seeker & Recruiter variants).
+- [x] Build resume upload widget (max 1MB client-side check) + auto-fill review UI.
+- [x] Build onboarding hard-wall route guard blocking all navigation until complete.
 - **Deliverable:** new users forced through onboarding; resume auto-fills fields.
 - **DoD:** onboarding blocks all navigation until submitted; resume parse populates ≥5 profile fields correctly on a sample resume.
 
