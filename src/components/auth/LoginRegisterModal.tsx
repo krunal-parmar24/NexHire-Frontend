@@ -49,7 +49,9 @@ export default function LoginRegisterModal({
       return;
     }
     if (role === "JobSeeker") {
-      const redirectPath = sessionStorage.getItem("nexhire_redirect_after_login");
+      const redirectPath = sessionStorage.getItem(
+        "nexhire_redirect_after_login"
+      );
       if (redirectPath) {
         sessionStorage.removeItem("nexhire_redirect_after_login");
         navigate(redirectPath);
@@ -57,9 +59,13 @@ export default function LoginRegisterModal({
         navigate("/seeker/applications");
       }
     } else {
-      const redirectPath = sessionStorage.getItem("nexhire_redirect_after_login");
+      const redirectPath = sessionStorage.getItem(
+        "nexhire_redirect_after_login"
+      );
       sessionStorage.removeItem("nexhire_redirect_after_login");
-      navigate("/recruiter", { state: { showRecruiterApplyToast: !!redirectPath } });
+      navigate("/recruiter", {
+        state: { showRecruiterApplyToast: !!redirectPath },
+      });
     }
   };
 

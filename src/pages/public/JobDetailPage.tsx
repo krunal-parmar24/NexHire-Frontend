@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { useJobQuery, useSavedJobIdsQuery, useToggleSaveJobMutation } from "../../api/hooks/useJobs";
+import {
+  useJobQuery,
+  useSavedJobIdsQuery,
+  useToggleSaveJobMutation,
+} from "../../api/hooks/useJobs";
 import { useAuth } from "../../context/AuthContext";
 import PublicHeader from "../../components/PublicHeader";
 import LoginRegisterModal from "../../components/auth/LoginRegisterModal";
@@ -87,7 +91,9 @@ export default function JobDetailPage() {
           toast.current?.show({
             severity: data.isSaved ? "success" : "info",
             summary: data.isSaved ? "Saved" : "Unsaved",
-            detail: data.isSaved ? "Job saved successfully!" : "Job removed from saved list.",
+            detail: data.isSaved
+              ? "Job saved successfully!"
+              : "Job removed from saved list.",
             life: 2000,
           });
         },
@@ -98,7 +104,7 @@ export default function JobDetailPage() {
             detail: "Failed to update saved job status.",
             life: 3000,
           });
-        }
+        },
       });
     }
   };
@@ -159,9 +165,12 @@ export default function JobDetailPage() {
             <div className="w-20 h-20 rounded-full bg-red-50 flex items-center justify-center text-red-500 text-3xl mb-6">
               <i className="pi pi-exclamation-circle"></i>
             </div>
-            <h3 className="text-2xl font-bold text-slate-800 mb-4">Job Not Found</h3>
+            <h3 className="text-2xl font-bold text-slate-800 mb-4">
+              Job Not Found
+            </h3>
             <p className="text-slate-500 max-w-md mb-8 text-lg">
-              The job posting you are looking for might have been closed, deleted, or expired.
+              The job posting you are looking for might have been closed,
+              deleted, or expired.
             </p>
             <Button
               onClick={() => navigate("/")}
@@ -191,7 +200,7 @@ export default function JobDetailPage() {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Share button (decorative for now) */}
                   <Button
                     icon="pi pi-share-alt"
@@ -205,19 +214,27 @@ export default function JobDetailPage() {
                 <div className="flex flex-wrap gap-3 pt-6 border-t border-slate-100">
                   <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-xl border border-slate-100">
                     <i className="pi pi-map-marker text-slate-400"></i>
-                    <span className="text-sm font-semibold text-slate-700">{job.location}</span>
+                    <span className="text-sm font-semibold text-slate-700">
+                      {job.location}
+                    </span>
                   </div>
                   {job.salaryRange && (
                     <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-xl border border-slate-100">
                       <i className="pi pi-money-bill text-slate-400"></i>
-                      <span className="text-sm font-semibold text-slate-700">{job.salaryRange}</span>
+                      <span className="text-sm font-semibold text-slate-700">
+                        {job.salaryRange}
+                      </span>
                     </div>
                   )}
                   <div className="flex items-center gap-2 px-4 py-2 bg-blue-50/50 rounded-xl border border-blue-100/50">
-                    <span className="text-sm font-bold text-blue-700">{job.jobType}</span>
+                    <span className="text-sm font-bold text-blue-700">
+                      {job.jobType}
+                    </span>
                   </div>
                   <div className="flex items-center gap-2 px-4 py-2 bg-purple-50/50 rounded-xl border border-purple-100/50">
-                    <span className="text-sm font-bold text-purple-700">{job.remoteType}</span>
+                    <span className="text-sm font-bold text-purple-700">
+                      {job.remoteType}
+                    </span>
                   </div>
                 </div>
               </section>
@@ -249,7 +266,9 @@ export default function JobDetailPage() {
             {/* Sidebar (Desktop Sticky) */}
             <aside className="w-full lg:w-[340px] shrink-0 sticky top-28 flex flex-col gap-6">
               <div className="bg-white border border-slate-200/60 rounded-[2rem] p-8 shadow-sm flex flex-col gap-6">
-                <h3 className="font-extrabold text-slate-900 text-lg">Action Center</h3>
+                <h3 className="font-extrabold text-slate-900 text-lg">
+                  Action Center
+                </h3>
                 <div className="flex flex-col gap-3">
                   <Button
                     onClick={handleApply}
@@ -270,7 +289,7 @@ export default function JobDetailPage() {
                     }`}
                   />
                 </div>
-                
+
                 <div className="mt-4 pt-6 border-t border-slate-100">
                   <p className="text-sm font-medium text-slate-500 mb-4">
                     Have questions about this role?
@@ -289,9 +308,13 @@ export default function JobDetailPage() {
                 <div className="absolute -right-8 -top-8 w-32 h-32 bg-blue-500/20 rounded-full blur-[40px] mix-blend-screen"></div>
                 <h3 className="font-bold text-lg mb-2">Build Your Resume</h3>
                 <p className="text-slate-400 text-sm mb-6 leading-relaxed">
-                  Use our AI powered wizard to automatically build and optimize your profile for roles like this.
+                  Use our AI powered wizard to automatically build and optimize
+                  your profile for roles like this.
                 </p>
-                <Link to="/onboarding" className="text-blue-400 font-bold hover:text-blue-300 text-sm flex items-center gap-2">
+                <Link
+                  to="/onboarding"
+                  className="text-blue-400 font-bold hover:text-blue-300 text-sm flex items-center gap-2"
+                >
                   Update Profile <i className="pi pi-arrow-right"></i>
                 </Link>
               </div>
@@ -312,7 +335,7 @@ export default function JobDetailPage() {
                 {job.title}
               </span>
             </div>
-            
+
             <div className="flex items-center gap-3 w-full sm:w-auto shrink-0 justify-end">
               <Button
                 onClick={handleSave}

@@ -87,18 +87,24 @@ export const useToggleSaveJobMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (jobId: string) => {
-      const res = await api.post<{ isSaved: boolean }>(`/api/jobs/${jobId}/save`);
+      const res = await api.post<{ isSaved: boolean }>(
+        `/api/jobs/${jobId}/save`
+      );
       return { jobId, isSaved: res.data.isSaved };
     },
     onMutate: async (jobId) => {
       await queryClient.cancelQueries({ queryKey: ["savedJobs"] });
-      const previousSavedJobs = queryClient.getQueryData<string[]>(["savedJobs"]);
-      
+      const previousSavedJobs = queryClient.getQueryData<string[]>([
+        "savedJobs",
+      ]);
+
       queryClient.setQueryData<string[]>(["savedJobs"], (old) => {
         if (!old) return [];
-        return old.includes(jobId) ? old.filter((id) => id !== jobId) : [...old, jobId];
+        return old.includes(jobId)
+          ? old.filter((id) => id !== jobId)
+          : [...old, jobId];
       });
-      
+
       return { previousSavedJobs };
     },
     onError: (err, variables, context) => {
