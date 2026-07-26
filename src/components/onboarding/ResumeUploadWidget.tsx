@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useParseResumeMutation } from "../../api/hooks/useOnboarding";
+import { useParseResumeMutation, ParsedFields } from "../../api/hooks/useOnboarding";
 
 interface ResumeUploadWidgetProps {
-  onParseSuccess: (parsedData: any) => void;
+  onParseSuccess: (parsedData: ParsedFields) => void;
 }
 
 export default function ResumeUploadWidget({ onParseSuccess }: ResumeUploadWidgetProps) {

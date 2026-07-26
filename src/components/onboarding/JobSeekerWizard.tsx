@@ -23,7 +23,7 @@ export default function JobSeekerWizard() {
     mutation.mutate(formData);
   };
 
-  const updateField = (field: keyof ParsedFields, value: any) => {
+  const updateField = <K extends keyof ParsedFields>(field: K, value: ParsedFields[K]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -36,7 +36,7 @@ export default function JobSeekerWizard() {
         <h2 className="text-3xl font-extrabold text-brand-navy tracking-tight mb-2">
           Welcome to NexHire
         </h2>
-        <p className="text-gray-500">Let's set up your profile to find the best matches.</p>
+        <p className="text-gray-500">Let&apos;s set up your profile to find the best matches.</p>
       </div>
 
       {step === 1 && (
