@@ -154,7 +154,7 @@ export default function JobSeekerWizard() {
             </label>
             <Chips
               value={formData.skills || []}
-              onChange={(e) => updateField("skills", e.value)}
+              onChange={(e) => updateField("skills", e.value ?? undefined)}
               className="w-full"
               pt={{
                 container: {

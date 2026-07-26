@@ -12,8 +12,8 @@ import { Checkbox } from "primereact/checkbox";
 import { classNames } from "primereact/utils";
 
 interface Props {
-  visible: boolean;
-  onHide: () => void;
+  visible?: boolean;
+  onHide?: () => void;
 }
 
 export default function LoginRegisterModal({
@@ -34,6 +34,14 @@ export default function LoginRegisterModal({
   const { setTokens } = useAuth();
   const navigate = useNavigate();
 
+  const handleHide = () => {
+    if (sessionStorage.getItem("nexhire_redirect_after_login")) {
+      sessionStorage.removeItem("nexhire_redirect_after_login");
+      navigate("/");
+    }
+    onHide();
+  };
+
   const handleSuccess = (role: string, onboardingCompleted: boolean) => {
     onHide();
     if (!onboardingCompleted) {
@@ -41,9 +49,23 @@ export default function LoginRegisterModal({
       return;
     }
     if (role === "JobSeeker") {
-      navigate("/seeker/applications");
+      const redirectPath = sessionStorage.getItem(
+        "nexhire_redirect_after_login"
+      );
+      if (redirectPath) {
+        sessionStorage.removeItem("nexhire_redirect_after_login");
+        navigate(redirectPath);
+      } else {
+        navigate("/seeker/applications");
+      }
     } else {
-      navigate("/recruiter");
+      const redirectPath = sessionStorage.getItem(
+        "nexhire_redirect_after_login"
+      );
+      sessionStorage.removeItem("nexhire_redirect_after_login");
+      navigate("/recruiter", {
+        state: { showRecruiterApplyToast: !!redirectPath },
+      });
     }
   };
 
@@ -162,7 +184,7 @@ export default function LoginRegisterModal({
   return (
     <Dialog
       visible={visible}
-      onHide={onHide}
+      onHide={handleHide}
       showHeader={false}
       style={{ width: "90vw", maxWidth: "960px" }}
       className="border-0 rounded-3xl shadow-2xl overflow-hidden"
