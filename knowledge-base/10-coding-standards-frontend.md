@@ -37,19 +37,19 @@
 
 ## 7. Naming Conventions (Frontend Rows)
 
-| Element | Convention | Example |
-|---|---|---|
-| React component file | PascalCase.tsx | `ApplicantManagementPage.tsx` |
-| React hook | `use` + PascalCase | `useAgentChatMutation.ts` |
-| TypeScript type/interface | PascalCase | `ScreeningQuestion`, `ApplicationStatus` |
-| CSS class (scoped) | kebab-case | `.review-card__field` |
-| API route consumed | kebab-case, matches backend contract | `/api/agent/bulk-apply` |
+| Element                   | Convention                           | Example                                  |
+| ------------------------- | ------------------------------------ | ---------------------------------------- |
+| React component file      | PascalCase.tsx                       | `ApplicantManagementPage.tsx`            |
+| React hook                | `use` + PascalCase                   | `useAgentChatMutation.ts`                |
+| TypeScript type/interface | PascalCase                           | `ScreeningQuestion`, `ApplicationStatus` |
+| CSS class (scoped)        | kebab-case                           | `.review-card__field`                    |
+| API route consumed        | kebab-case, matches backend contract | `/api/agent/bulk-apply`                  |
 
 > Backend naming conventions (C# classes, migrations, etc.) are documented in the Backend knowledge base's `11-coding-standards-backend.md` — not duplicated here.
 
 ## 8. Error Handling (Frontend-Relevant)
 
-- AI/agent failures: no credit deduction happens on failure (backend rule), and the UI must show a clear inline error such as *"Something went wrong generating this — please try again"* rather than a silent failure or generic crash.
+- AI/agent failures: no credit deduction happens on failure (backend rule), and the UI must show a clear inline error such as _"Something went wrong generating this — please try again"_ rather than a silent failure or generic crash.
 - Never log JWT tokens or any secret to the browser console.
 
 ## 9. Git & Commit Conventions

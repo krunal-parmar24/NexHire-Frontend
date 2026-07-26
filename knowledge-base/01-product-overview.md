@@ -10,14 +10,14 @@ The Agentic AI-Based Job Portal is a portfolio-grade demonstration of Agentic AI
 
 ## 2. Tech Stack (Frontend Slice)
 
-| Concern | Technology |
-|---|---|
-| UI framework | React (Vite) + PrimeReact (components, dynamic form renderers, persistent chat panel) |
-| Real-time | SignalR client (reasoning trace streaming, live status notifications) |
-| Server state | React Query |
-| Client/session state | React Context (auth) + Zustand (session, e.g. chat in-flight flag) |
-| HTTP | Axios with interceptor for JWT attach/refresh |
-| Deployment | Static bundle served via Nginx inside a Docker container, deployed to Render |
+| Concern              | Technology                                                                            |
+| -------------------- | ------------------------------------------------------------------------------------- |
+| UI framework         | React (Vite) + PrimeReact (components, dynamic form renderers, persistent chat panel) |
+| Real-time            | SignalR client (reasoning trace streaming, live status notifications)                 |
+| Server state         | React Query                                                                           |
+| Client/session state | React Context (auth) + Zustand (session, e.g. chat in-flight flag)                    |
+| HTTP                 | Axios with interceptor for JWT attach/refresh                                         |
+| Deployment           | Static bundle served via Nginx inside a Docker container, deployed to Render          |
 
 The backend is ASP.NET Core (C#) + EF Core + Supabase PostgreSQL/Storage + Redis + Microsoft Agent Framework + GitHub Models (GPT-4.1-mini). The frontend never talks to Supabase, Redis, or the LLM directly — everything goes through the backend's REST/SignalR API surface described in [14-api-contracts-frontend.md](14-api-contracts-frontend.md).
 
@@ -48,18 +48,18 @@ Per SRS §9 — do not build UI for any of the following:
 
 ## 5. Core Features & Priority (Frontend-relevant)
 
-| # | Feature | Priority |
-|---|---|---|
-| 1 | Guest browsing, manual search/filter | P0 |
-| 2 | Login/Register + onboarding wizard + resume upload UI | P0 |
-| 3 | Dynamic screening form (seeker + recruiter builder + preview) | P0 |
-| 4 | Match score badge display | P0 |
-| 5 | Agentic AI chat UI + streaming reasoning trace | P0 |
-| 6 | Credit meter + rate-limit/"AI Busy" UI states | P0 |
-| 7 | Recruiter job posting lifecycle UI + applicant pipeline UI | P0 |
-| 8 | In-app notifications UI | P1 |
-| 9 | Responsible-AI disclaimer | P1 |
-| 10 | Deployment (static bundle to Render) | P0 |
+| #   | Feature                                                       | Priority |
+| --- | ------------------------------------------------------------- | -------- |
+| 1   | Guest browsing, manual search/filter                          | P0       |
+| 2   | Login/Register + onboarding wizard + resume upload UI         | P0       |
+| 3   | Dynamic screening form (seeker + recruiter builder + preview) | P0       |
+| 4   | Match score badge display                                     | P0       |
+| 5   | Agentic AI chat UI + streaming reasoning trace                | P0       |
+| 6   | Credit meter + rate-limit/"AI Busy" UI states                 | P0       |
+| 7   | Recruiter job posting lifecycle UI + applicant pipeline UI    | P0       |
+| 8   | In-app notifications UI                                       | P1       |
+| 9   | Responsible-AI disclaimer                                     | P1       |
+| 10  | Deployment (static bundle to Render)                          | P0       |
 
 ## 6. Assumptions & Constraints Relevant to Frontend
 

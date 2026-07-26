@@ -4,10 +4,10 @@
 
 ## 1. Prerequisites
 
-| Tool | Version | Purpose |
-|---|---|---|
-| Node.js | 20.x | Frontend build/run |
-| Git | Latest | Version control |
+| Tool    | Version | Purpose            |
+| ------- | ------- | ------------------ |
+| Node.js | 20.x    | Frontend build/run |
+| Git     | Latest  | Version control    |
 
 > Database (Postgres/pgvector) and Redis run only on the **backend** side via Docker Compose — see the one-line pointer in §3 below. The frontend has no direct dependency on either.
 
@@ -52,12 +52,12 @@ Recommended order every time you start local development:
 
 ## 6. Troubleshooting (Frontend-Relevant)
 
-| Symptom | Likely Cause | Fix |
-|---|---|---|
-| SignalR client can't connect | `VITE_SIGNALR_HUB_URL` mismatch or backend CORS not configured for `localhost:5173` | Verify the env var; confirm with backend that its CORS policy includes the frontend origin |
-| API calls return CORS errors | Backend CORS policy doesn't include frontend origin | Confirm with backend team/config — this is a backend-side fix |
-| Resume parse returns empty fields | Backend `LLM_API_KEY` missing/invalid, or file exceeds 1MB cap | Check file size client-side first; if under 1MB, this is a backend-side issue |
-| "AI Busy" message immediately on first chat message | Backend/Redis token bucket not reset from a previous session | Backend-side fix (flush local Redis) — not a frontend issue |
+| Symptom                                             | Likely Cause                                                                        | Fix                                                                                        |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| SignalR client can't connect                        | `VITE_SIGNALR_HUB_URL` mismatch or backend CORS not configured for `localhost:5173` | Verify the env var; confirm with backend that its CORS policy includes the frontend origin |
+| API calls return CORS errors                        | Backend CORS policy doesn't include frontend origin                                 | Confirm with backend team/config — this is a backend-side fix                              |
+| Resume parse returns empty fields                   | Backend `LLM_API_KEY` missing/invalid, or file exceeds 1MB cap                      | Check file size client-side first; if under 1MB, this is a backend-side issue              |
+| "AI Busy" message immediately on first chat message | Backend/Redis token bucket not reset from a previous session                        | Backend-side fix (flush local Redis) — not a frontend issue                                |
 
 ## Implementation Checklist
 
