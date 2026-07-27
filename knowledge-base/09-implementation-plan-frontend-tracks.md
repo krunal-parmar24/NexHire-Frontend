@@ -40,9 +40,9 @@
 
 ## Day 5 — Dynamic Application Form & Submission Rules
 
-- Build dynamic form renderer (shared component with builder) bound to `screening_questions`.
-- Build application confirmation screen.
-- Build "My Applications" list with withdraw action.
+- [x] Build dynamic form renderer (shared component with builder) bound to `screening_questions`.
+- [x] Build application confirmation screen.
+- [x] Build "My Applications" list with withdraw action.
 - **Deliverable:** end-to-end manual apply flow (no AI) fully functional.
 - **DoD:** seeker can apply, view status, withdraw; withdrawn applications remain visible to recruiter.
 
