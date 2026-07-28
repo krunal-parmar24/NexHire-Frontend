@@ -8,6 +8,7 @@ export interface AnswerDto {
 export interface SubmitApplicationRequest {
   jobId: string;
   answers: AnswerDto[];
+  resumeUrl: string;
 }
 
 export interface SubmitApplicationResponse {
@@ -45,4 +46,18 @@ export const withdrawApplication = (
 ): Promise<WithdrawApplicationResponse> =>
   api
     .patch<WithdrawApplicationResponse>(`/api/applications/${id}/withdraw`)
+    .then((r) => r.data);
+
+export interface UpdateApplicationStatusResponse {
+  status: string;
+}
+
+export const updateApplicationStatus = (
+  id: string,
+  status: string
+): Promise<UpdateApplicationStatusResponse> =>
+  api
+    .patch<UpdateApplicationStatusResponse>(`/api/applications/${id}/status`, {
+      status,
+    })
     .then((r) => r.data);

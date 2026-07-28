@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../axiosClient";
+import { getJobApplicants, ApplicantDto } from "../endpoints/jobs";
 
 export interface ScreeningQuestion {
   id: string;
@@ -114,6 +115,26 @@ export const useToggleSaveJobMutation = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["savedJobs"] });
+    },
+  });
+};
+
+export const useJobApplicantsQuery = (jobId: string) => {
+  return useQuery<{ items: ApplicantDto[] }, Error>({
+    queryKey: ["job-applicants", jobId],
+    queryFn: () => getJobApplicants(jobId),
+    enabled: !!jobId,
+  });
+};
+
+export const useMyJobsQuery = (page = 1, pageSize = 20) => {
+  return useQuery<JobListResponse>({
+    queryKey: ["my-jobs", page, pageSize],
+    queryFn: async () => {
+      const res = await api.get<JobListResponse>("/api/jobs/mine", {
+        params: { page, pageSize },
+      });
+      return res.data;
     },
   });
 };

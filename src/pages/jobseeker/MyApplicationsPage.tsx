@@ -78,98 +78,128 @@ export default function MyApplicationsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-sans pb-32">
+    <div className="min-h-screen bg-slate-50/50 flex flex-col font-sans pb-32">
       <Toast ref={toast} />
       <PublicHeader />
 
-      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col gap-8">
-        <div>
-          <h1 className="text-3xl font-extrabold text-slate-900 mb-2">
-            My Applications
-          </h1>
-          <p className="text-slate-600">
-            Track and manage your submitted job applications.
-          </p>
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col gap-10">
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white p-8 rounded-3xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-slate-100">
+          <div>
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">
+              My{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                Applications
+              </span>
+            </h1>
+            <p className="mt-2 text-base text-slate-500 font-medium">
+              Track and manage your submitted job applications.
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Link to="/">
+              <Button
+                label="Explore Jobs"
+                icon="pi pi-search"
+                className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 border-none shadow-lg hover:shadow-indigo-500/30 transition-all text-white font-bold text-base"
+              />
+            </Link>
+          </div>
         </div>
 
         {isLoading ? (
-          <div className="flex flex-col gap-4">
-            <Skeleton width="100%" height="8rem" className="rounded-2xl" />
-            <Skeleton width="100%" height="8rem" className="rounded-2xl" />
+          <div className="flex flex-col gap-6">
+            <Skeleton
+              width="100%"
+              height="10rem"
+              className="rounded-3xl shadow-sm"
+            />
+            <Skeleton
+              width="100%"
+              height="10rem"
+              className="rounded-3xl shadow-sm"
+            />
           </div>
         ) : isError ? (
-          <div className="bg-red-50 text-red-600 p-6 rounded-2xl border border-red-100 text-center">
+          <div className="bg-red-50 text-red-600 p-8 rounded-3xl border border-red-100 text-center font-semibold">
             Failed to load applications. Please try again later.
           </div>
         ) : data?.items.length === 0 ? (
-          <div className="bg-white rounded-[2rem] border border-slate-200/60 p-20 text-center shadow-sm flex flex-col items-center">
-            <div className="w-20 h-20 rounded-full bg-blue-50 flex items-center justify-center text-blue-500 text-3xl mb-6">
+          <div className="bg-white rounded-3xl border border-slate-100 p-20 text-center shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] flex flex-col items-center">
+            <div className="w-24 h-24 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 text-4xl mb-6 shadow-sm">
               <i className="pi pi-send"></i>
             </div>
-            <h3 className="text-2xl font-bold text-slate-800 mb-4">
+            <h3 className="text-3xl font-extrabold text-slate-900 mb-4">
               No applications yet
             </h3>
-            <p className="text-slate-500 max-w-md mb-8 text-lg">
+            <p className="text-slate-500 max-w-md mb-8 text-lg font-medium">
               You haven&apos;t applied to any jobs yet. Start exploring
-              opportunities!
+              opportunities to find your dream career!
             </p>
             <Link to="/">
               <Button
                 label="Find Jobs"
-                className="!bg-slate-900 hover:!bg-slate-800 !border-none !text-white rounded-xl font-bold px-8 py-3"
+                className="px-8 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 border-none shadow-md hover:shadow-lg transition-all text-white font-bold text-base"
               />
             </Link>
           </div>
         ) : (
-          <div className="flex flex-col gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {data?.items.map((app) => (
               <div
                 key={app.id}
-                className="bg-white border border-slate-200/60 rounded-[2rem] p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row gap-6 justify-between items-start sm:items-center hover:border-slate-300 transition-colors"
+                className="bg-white rounded-3xl p-8 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-slate-100 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-1">
-                    <Link
-                      to={`/jobs/${app.jobId}`}
-                      className="hover:text-blue-600 transition-colors"
-                    >
-                      {app.jobTitle}
-                    </Link>
-                  </h3>
-                  <div className="text-slate-600 font-medium mb-4">
-                    {app.companyName}
-                  </div>
-                  <div className="flex items-center gap-4 text-sm">
+                  <div className="flex justify-between items-start mb-4">
+                    <h3 className="text-2xl font-extrabold text-slate-900 line-clamp-2">
+                      <Link
+                        to={`/jobs/${app.jobId}`}
+                        className="hover:text-blue-600 transition-colors"
+                      >
+                        {app.jobTitle}
+                      </Link>
+                    </h3>
                     <Tag
                       value={app.status}
                       severity={getStatusSeverity(app.status)}
-                      className="rounded-lg px-3 py-1 font-bold text-xs"
+                      className="rounded-lg px-4 py-1.5 font-bold text-sm shadow-sm ml-4 shrink-0"
                     />
-                    <span className="text-slate-400">
-                      Applied {new Date(app.submittedAt).toLocaleDateString()}
-                    </span>
+                  </div>
+                  <div className="text-slate-500 font-semibold mb-6 text-lg flex items-center gap-2">
+                    <i className="pi pi-building text-slate-400"></i>
+                    {app.companyName}
                   </div>
                 </div>
 
-                <div className="shrink-0 flex gap-3 w-full sm:w-auto">
-                  {(app.status === "Applied" ||
-                    app.status === "Shortlisted" ||
-                    app.status === "Interview") && (
-                    <Button
-                      label="Withdraw"
-                      icon="pi pi-times"
-                      onClick={() => handleWithdraw(app.id)}
-                      disabled={withdrawMutation.isPending}
-                      className="w-full sm:w-auto !bg-red-50 !text-red-600 !border-none hover:!bg-red-100 font-bold rounded-xl px-6 py-2.5"
-                    />
-                  )}
-                  <Link to={`/jobs/${app.jobId}`} className="w-full sm:w-auto">
-                    <Button
-                      label="View Job"
-                      outlined
-                      className="w-full sm:w-auto !border-slate-200 !text-slate-700 hover:!bg-slate-50 hover:!border-slate-300 font-bold rounded-xl px-6 py-2.5"
-                    />
-                  </Link>
+                <div className="flex flex-col sm:flex-row gap-4 items-center justify-between pt-6 border-t border-slate-100">
+                  <div className="text-sm text-slate-400 font-medium flex items-center gap-2">
+                    <i className="pi pi-calendar"></i>
+                    Applied {new Date(app.submittedAt).toLocaleDateString()}
+                  </div>
+
+                  <div className="flex gap-3 w-full sm:w-auto">
+                    {(app.status === "Applied" ||
+                      app.status === "Shortlisted" ||
+                      app.status === "Interview") && (
+                      <Button
+                        label="Withdraw"
+                        icon="pi pi-times"
+                        onClick={() => handleWithdraw(app.id)}
+                        disabled={withdrawMutation.isPending}
+                        className="w-full sm:w-auto !bg-red-50 !text-red-600 !border-none hover:!bg-red-100 font-bold rounded-xl px-6 py-2.5 transition-colors"
+                      />
+                    )}
+                    <Link
+                      to={`/jobs/${app.jobId}`}
+                      className="w-full sm:w-auto"
+                    >
+                      <Button
+                        label="View Job"
+                        className="w-full sm:w-auto !bg-slate-100 !text-slate-700 !border-none hover:!bg-slate-200 font-bold rounded-xl px-6 py-2.5 transition-colors"
+                      />
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}
