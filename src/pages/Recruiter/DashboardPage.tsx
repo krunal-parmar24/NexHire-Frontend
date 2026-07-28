@@ -141,7 +141,7 @@ export default function DashboardPage() {
                 <i className="pi pi-briefcase"></i>
               </div>
               <h3 className="text-2xl font-bold text-slate-800 mb-2">No active postings</h3>
-              <p className="text-slate-500 max-w-md text-base mb-6">You haven't posted any jobs yet.</p>
+              <p className="text-slate-500 max-w-md text-base mb-6">You haven&apos;t posted any jobs yet.</p>
               <Link to="/recruiter/jobs/new">
                 <Button label="Post your first job" className="!rounded-xl !bg-blue-600 hover:!bg-blue-700 !border-none !text-white px-6 py-2.5 font-bold shadow-md" />
               </Link>

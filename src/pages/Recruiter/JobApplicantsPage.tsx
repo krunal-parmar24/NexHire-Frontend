@@ -50,27 +50,29 @@ export default function JobApplicantsPage() {
     updateStatus({ id: applicationId, status: newStatus });
   };
 
-  const statusBodyTemplate = (rowData: any) => {
-    if (rowData.status === "Withdrawn") {
+  const statusBodyTemplate = (rowData: unknown) => {
+    const row = rowData as { status: string; applicationId: string };
+    if (row.status === "Withdrawn") {
       return <Tag value="Withdrawn" severity="secondary" className="px-3 py-1 font-bold text-xs" />;
     }
 
     return (
       <Dropdown 
-        value={rowData.status} 
+        value={row.status} 
         options={STATUS_OPTIONS.map(s => ({ label: s.label, value: s.value }))} 
-        onChange={(e) => handleStatusChange(rowData.applicationId, e.value)} 
+        onChange={(e) => handleStatusChange(row.applicationId, e.value)} 
         className="w-full md:w-[12rem] !border-slate-200 !rounded-xl !shadow-none focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100" 
       />
     );
   };
 
-  const answersBodyTemplate = (rowData: any) => {
-    if (!rowData.answers || rowData.answers.length === 0)
+  const answersBodyTemplate = (rowData: unknown) => {
+    const row = rowData as { answers?: { questionId: string; value: string }[] };
+    if (!row.answers || row.answers.length === 0)
       return <span className="text-slate-400 italic text-sm">No answers</span>;
     return (
       <div className="flex flex-col gap-2 py-2">
-        {rowData.answers.map((ans: any, idx: number) => {
+        {row.answers.map((ans: { questionId: string; value: string }, idx: number) => {
           const label = questionLabelMap[ans.questionId] || `Question ${idx + 1}`;
           return (
             <div key={ans.questionId || idx} className="flex flex-col gap-0.5 text-sm">
@@ -83,20 +85,17 @@ export default function JobApplicantsPage() {
     );
   };
 
-  const resumeBodyTemplate = (rowData: any) => {
-    if (!rowData.resumeUrl) return <span className="text-slate-400">N/A</span>;
+  const resumeBodyTemplate = (rowData: unknown) => {
+    const row = rowData as { resumeUrl?: string };
+    if (!row.resumeUrl) return <span className="text-slate-400">N/A</span>;
     return (
-      <a href={rowData.resumeUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-blue-600 font-medium hover:underline p-2 rounded-lg hover:bg-blue-50 transition-colors inline-flex">
+      <a href={row.resumeUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-blue-600 font-medium hover:underline p-2 rounded-lg hover:bg-blue-50 transition-colors inline-flex">
         <i className="pi pi-file-pdf"></i>
         <span>View</span>
       </a>
     );
   };
 
-  const getStatusSeverity = (status: string) => {
-    const opt = STATUS_OPTIONS.find(o => o.value === status);
-    return opt ? opt.severity : "info";
-  };
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-sans pb-32">
@@ -164,7 +163,7 @@ export default function JobApplicantsPage() {
               <TabPanel header="Kanban Board" leftIcon="pi pi-objects-column mr-2">
                 <div className="p-4 m-4 flex flex-col gap-4">
                   {/* Active pipeline stages — vertical flex list */}
-                  {[...STATUS_OPTIONS, { label: "Withdrawn", value: "Withdrawn", severity: "secondary" as any }].map(statusObj => {
+                  {[...STATUS_OPTIONS, { label: "Withdrawn", value: "Withdrawn", severity: "secondary" as const }].map(statusObj => {
                     const columnApplicants = applicants.filter(a => a.status === statusObj.value);
                     const isWithdrawn = statusObj.value === "Withdrawn";
                     return (

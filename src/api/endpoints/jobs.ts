@@ -45,7 +45,7 @@ export const getJobApplicants = (
 export const getMyJobs = (
   page = 1,
   pageSize = 20
-): Promise<any> =>
+): Promise<unknown> =>
   axiosClient
     .get(`/api/jobs/mine`, { params: { page, pageSize } })
     .then((r) => r.data);

@@ -9,7 +9,7 @@ export async function uploadResume(
   const fileName = `${userId}_${Date.now()}_resume.${fileExt}`;
 
   // Standard Supabase upload
-  const { data, error: uploadError } = await supabase.storage
+  const { error: uploadError } = await supabase.storage
     .from("resume") // Using 'resume' based on user prompt 'created "resume" bucket'
     .upload(fileName, file, {
       cacheControl: "3600",

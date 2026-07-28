@@ -64,7 +64,7 @@ export default function ApplyToJobPage() {
           onSettled: () => setIsUploading(false)
         }
       );
-    } catch (err: any) {
+    } catch (err: unknown) {
       setIsUploading(false);
       toast.current?.show({
         severity: "error",
