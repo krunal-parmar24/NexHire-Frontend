@@ -1,16 +1,19 @@
-import { supabase } from '../lib/supabaseClient';
+import { supabase } from "../lib/supabaseClient";
 
-export async function uploadResume(file: File, userId: string): Promise<string> {
-  const fileExt = file.name.split('.').pop() || 'pdf';
+export async function uploadResume(
+  file: File,
+  userId: string
+): Promise<string> {
+  const fileExt = file.name.split(".").pop() || "pdf";
   // Use a unique file name
   const fileName = `${userId}_${Date.now()}_resume.${fileExt}`;
 
   // Standard Supabase upload
   const { data, error: uploadError } = await supabase.storage
-    .from('resume') // Using 'resume' based on user prompt 'created "resume" bucket'
+    .from("resume") // Using 'resume' based on user prompt 'created "resume" bucket'
     .upload(fileName, file, {
-      cacheControl: '3600',
-      upsert: false
+      cacheControl: "3600",
+      upsert: false,
     });
 
   if (uploadError) {
@@ -20,7 +23,7 @@ export async function uploadResume(file: File, userId: string): Promise<string> 
 
   // Get public URL
   const { data: publicUrlData } = supabase.storage
-    .from('resume')
+    .from("resume")
     .getPublicUrl(fileName);
 
   return publicUrlData.publicUrl;
