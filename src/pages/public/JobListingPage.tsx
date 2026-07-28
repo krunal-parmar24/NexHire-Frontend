@@ -7,6 +7,7 @@ import {
 } from "../../api/hooks/useJobs";
 import { useAuth } from "../../context/AuthContext";
 import PublicHeader from "../../components/PublicHeader";
+import { MatchScoreBadge } from "../../components/jobs/MatchScoreBadge";
 import LoginRegisterModal from "../../components/auth/LoginRegisterModal";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
@@ -406,6 +407,7 @@ export default function JobListingPage() {
                         <span className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-purple-50 text-purple-700 border border-purple-100/50">
                           {job.remoteType}
                         </span>
+                        <MatchScoreBadge jobId={job.id} />
                       </div>
                     </div>
 

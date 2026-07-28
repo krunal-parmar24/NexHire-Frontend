@@ -1,6 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../axiosClient";
-import { getJobApplicants, ApplicantDto } from "../endpoints/jobs";
+import {
+  getJobApplicants,
+  ApplicantDto,
+  getJobMatchScore,
+  MatchScoreResponse,
+} from "../endpoints/jobs";
 
 export interface ScreeningQuestion {
   id: string;
@@ -136,5 +141,14 @@ export const useMyJobsQuery = (page = 1, pageSize = 20) => {
       });
       return res.data;
     },
+  });
+};
+
+export const useMatchScoreQuery = (jobId: string, isAuthenticated: boolean) => {
+  return useQuery<MatchScoreResponse, Error>({
+    queryKey: ["match-score", jobId],
+    queryFn: () => getJobMatchScore(jobId),
+    enabled: !!jobId && isAuthenticated,
+    retry: false, // Don't retry if 401 or 404
   });
 };

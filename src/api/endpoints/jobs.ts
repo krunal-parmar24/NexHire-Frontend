@@ -46,3 +46,27 @@ export const getMyJobs = (page = 1, pageSize = 20): Promise<unknown> =>
   axiosClient
     .get(`/api/jobs/mine`, { params: { page, pageSize } })
     .then((r) => r.data);
+
+export interface PillarScore {
+  weight: number;
+  score: number;
+}
+
+export interface MatchScoreBreakdown {
+  skillsCoverage: PillarScore;
+  experienceFit: PillarScore;
+  certificationMatch: PillarScore;
+  domainTitleMatch: PillarScore;
+}
+
+export interface MatchScoreResponse {
+  jobId: string;
+  overallScore: number;
+  breakdown: MatchScoreBreakdown;
+  certificationWeightRedistributed: boolean;
+}
+
+export const getJobMatchScore = (jobId: string): Promise<MatchScoreResponse> =>
+  axiosClient
+    .get<MatchScoreResponse>(`/api/jobs/${jobId}/match-score`)
+    .then((r) => r.data);
