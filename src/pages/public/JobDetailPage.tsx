@@ -7,6 +7,7 @@ import {
 } from "../../api/hooks/useJobs";
 import { useAuth } from "../../context/AuthContext";
 import PublicHeader from "../../components/PublicHeader";
+import { MatchScoreBadge } from "../../components/jobs/MatchScoreBadge";
 import LoginRegisterModal from "../../components/auth/LoginRegisterModal";
 import { Button } from "primereact/button";
 import { Skeleton } from "primereact/skeleton";
@@ -304,6 +305,9 @@ export default function JobDetailPage() {
                     className="w-full !rounded-xl !border-slate-200 !text-slate-700 hover:!bg-slate-50 hover:!border-slate-300 font-semibold py-3"
                   />
                 </div>
+
+                {/* AI Match Score Card — only visible to authenticated JobSeekers */}
+                <MatchScoreBadge jobId={job.id} variant="sidebar" />
               </div>
 
               <div className="bg-slate-900 rounded-[2rem] p-8 text-white relative overflow-hidden shadow-xl">

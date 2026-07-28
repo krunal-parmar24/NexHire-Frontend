@@ -56,10 +56,10 @@
 
 ## Day 7 — ATS Match Scoring Engine (Display)
 
-- Build match score badge on job cards/listing (seeker view).
-- Build percentage badge/tooltip breakdown by pillar.
-- **Deliverable:** match score badge renders correctly for any (user, job) pair returned by the backend.
-- **DoD:** badge display verified against 3+ manual test cases including a no-cert redistribution case.
+- [x] Build match score badge on job cards/listing (seeker view).
+- [x] Build percentage badge/tooltip breakdown by pillar.
+- [x] **Deliverable:** match score badge renders correctly for any (user, job) pair returned by the backend.
+- [x] **DoD:** badge display verified against 3+ manual test cases including a no-cert redistribution case.
 
 ## Day 8 — Agent Framework Shell + Job Search/Match & Autofill Tools (Frontend)
 
