@@ -7,6 +7,8 @@ import {
   SubmitApplicationResponse,
   WithdrawApplicationResponse,
   ApplicationDto,
+  updateApplicationStatus,
+  UpdateApplicationStatusResponse,
 } from "../endpoints/applications";
 
 export const useSubmitApplication = () => {
@@ -38,6 +40,21 @@ export const useWithdrawApplication = () => {
     mutationFn: withdrawApplication,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["my-applications"] });
+    },
+  });
+};
+
+export const useUpdateApplicationStatus = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<
+    UpdateApplicationStatusResponse,
+    Error,
+    { id: string; status: string }
+  >({
+    mutationFn: ({ id, status }) => updateApplicationStatus(id, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["job-applicants"] });
     },
   });
 };

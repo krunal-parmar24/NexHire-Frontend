@@ -25,3 +25,27 @@ export const updateJob = (
   data: CreateJobRequest
 ): Promise<JobResponse> =>
   axiosClient.put<JobResponse>(`/api/jobs/${id}`, data).then((r) => r.data);
+
+export interface ApplicantDto {
+  applicationId: string;
+  applicantName: string;
+  status: string;
+  answers: { questionId: string; value: string }[];
+  resumeUrl?: string;
+  profileSummary?: string;
+}
+
+export const getJobApplicants = (
+  jobId: string
+): Promise<{ items: ApplicantDto[] }> =>
+  axiosClient
+    .get<{ items: ApplicantDto[] }>(`/api/jobs/${jobId}/applicants`)
+    .then((r) => r.data);
+
+export const getMyJobs = (
+  page = 1,
+  pageSize = 20
+): Promise<any> =>
+  axiosClient
+    .get(`/api/jobs/mine`, { params: { page, pageSize } })
+    .then((r) => r.data);

@@ -48,10 +48,11 @@
 
 ## Day 6 — Applicant Management & Recruiter Dashboard
 
-- Build Applicant Management table (per job), status dropdown/kanban.
-- Build Recruiter Dashboard home with quick links.
-- **Deliverable:** recruiter can manage full applicant lifecycle.
-- **DoD:** all pipeline states reachable; dashboard counts match backend truth.
+- [x] Build Applicant Management table (per job), status dropdown/kanban.
+- [x] Build Resume Viewer integration (open public Supabase Storage URL in new tab) for each applicant.
+- [x] Build Recruiter Dashboard home with quick links.
+- **Deliverable:** recruiter can manage full applicant lifecycle and view submitted resumes.
+- **DoD:** all pipeline states reachable; dashboard counts match backend truth; recruiter can successfully view applicant resumes.
 
 ## Day 7 — ATS Match Scoring Engine (Display)
 

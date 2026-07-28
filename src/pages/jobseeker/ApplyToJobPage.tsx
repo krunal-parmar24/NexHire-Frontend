@@ -1,12 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useJobQuery } from "../../api/hooks/useJobs";
 import { useSubmitApplication } from "../../api/hooks/useApplications";
 import { DynamicFormRenderer } from "../../components/forms/DynamicFormRenderer";
 import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
+import { FileUpload } from "primereact/fileupload";
 import { ScreeningAnswer } from "../../types/screeningQuestion";
 import PublicHeader from "../../components/PublicHeader";
+import { uploadResume } from "../../api/uploadResume";
 
 export default function ApplyToJobPage() {
   const { id } = useParams<{ id: string }>();
@@ -15,6 +17,9 @@ export default function ApplyToJobPage() {
 
   const { data: job, isLoading, isError } = useJobQuery(id || "");
   const submitApplication = useSubmitApplication();
+  
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     if (job?.title) {
@@ -22,28 +27,52 @@ export default function ApplyToJobPage() {
     }
   }, [job]);
 
-  const handleSubmit = (answers: ScreeningAnswer[]) => {
+  const handleSubmit = async (answers: ScreeningAnswer[]) => {
     if (!id) return;
-    submitApplication.mutate(
-      { jobId: id, answers },
-      {
-        onSuccess: () => {
-          navigate("/seeker/applications", { state: { applied: true } });
-        },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onError: (err: any) => {
-          const msg =
-            err.response?.data?.error?.message ||
-            "Failed to submit application";
-          toast.current?.show({
-            severity: "error",
-            summary: "Submission Failed",
-            detail: msg,
-            life: 5000,
-          });
-        },
-      }
-    );
+    if (!resumeFile) {
+      toast.current?.show({
+        severity: "error",
+        summary: "Validation Error",
+        detail: "Resume is required. Please upload your resume.",
+        life: 5000,
+      });
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      const resumeUrl = await uploadResume(resumeFile, "applicant");
+      
+      submitApplication.mutate(
+        { jobId: id, answers, resumeUrl },
+        {
+          onSuccess: () => {
+            navigate("/seeker/applications", { state: { applied: true } });
+          },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          onError: (err: any) => {
+            const msg =
+              err.response?.data?.error?.message ||
+              "Failed to submit application";
+            toast.current?.show({
+              severity: "error",
+              summary: "Submission Failed",
+              detail: msg,
+              life: 5000,
+            });
+          },
+          onSettled: () => setIsUploading(false)
+        }
+      );
+    } catch (err: any) {
+      setIsUploading(false);
+      toast.current?.show({
+        severity: "error",
+        summary: "Upload Failed",
+        detail: "Failed to upload resume. Please try again.",
+        life: 5000,
+      });
+    }
   };
 
   if (isLoading) {
@@ -110,6 +139,27 @@ export default function ApplyToJobPage() {
             icon="pi pi-bolt"
             className="!bg-blue-600 hover:!bg-blue-700 !border-none text-white rounded-xl font-bold px-6 py-2.5 shrink-0 shadow-lg shadow-blue-600/20"
             disabled
+          />
+        </div>
+
+        <div className="bg-white rounded-[2rem] border border-slate-200/60 p-6 sm:p-8 shadow-sm relative overflow-hidden">
+          {isUploading && (
+            <div className="absolute inset-0 bg-white/70 backdrop-blur-sm z-10 flex flex-col items-center justify-center">
+              <i className="pi pi-spin pi-spinner text-4xl text-blue-600 mb-4"></i>
+              <p className="text-slate-700 font-medium">Uploading Resume...</p>
+            </div>
+          )}
+          <h2 className="text-xl font-bold text-slate-800 mb-4">Resume <span className="text-red-500">*</span></h2>
+          <p className="text-slate-500 text-sm mb-4">Please upload your resume in PDF format (Max 1MB).</p>
+          <FileUpload
+            mode="basic"
+            name="resume"
+            accept="application/pdf"
+            maxFileSize={1000000}
+            onSelect={(e) => setResumeFile(e.files[0])}
+            onClear={() => setResumeFile(null)}
+            chooseLabel={resumeFile ? resumeFile.name : "Choose Resume (PDF)"}
+            className="w-full md:w-auto"
           />
         </div>
 
