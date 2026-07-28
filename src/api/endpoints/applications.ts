@@ -57,5 +57,7 @@ export const updateApplicationStatus = (
   status: string
 ): Promise<UpdateApplicationStatusResponse> =>
   api
-    .patch<UpdateApplicationStatusResponse>(`/api/applications/${id}/status`, { status })
+    .patch<UpdateApplicationStatusResponse>(`/api/applications/${id}/status`, {
+      status,
+    })
     .then((r) => r.data);

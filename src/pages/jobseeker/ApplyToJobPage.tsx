@@ -17,7 +17,7 @@ export default function ApplyToJobPage() {
 
   const { data: job, isLoading, isError } = useJobQuery(id || "");
   const submitApplication = useSubmitApplication();
-  
+
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -42,7 +42,7 @@ export default function ApplyToJobPage() {
     try {
       setIsUploading(true);
       const resumeUrl = await uploadResume(resumeFile, "applicant");
-      
+
       submitApplication.mutate(
         { jobId: id, answers, resumeUrl },
         {
@@ -61,7 +61,7 @@ export default function ApplyToJobPage() {
               life: 5000,
             });
           },
-          onSettled: () => setIsUploading(false)
+          onSettled: () => setIsUploading(false),
         }
       );
     } catch (err: unknown) {
@@ -149,8 +149,12 @@ export default function ApplyToJobPage() {
               <p className="text-slate-700 font-medium">Uploading Resume...</p>
             </div>
           )}
-          <h2 className="text-xl font-bold text-slate-800 mb-4">Resume <span className="text-red-500">*</span></h2>
-          <p className="text-slate-500 text-sm mb-4">Please upload your resume in PDF format (Max 1MB).</p>
+          <h2 className="text-xl font-bold text-slate-800 mb-4">
+            Resume <span className="text-red-500">*</span>
+          </h2>
+          <p className="text-slate-500 text-sm mb-4">
+            Please upload your resume in PDF format (Max 1MB).
+          </p>
           <FileUpload
             mode="basic"
             name="resume"
@@ -165,7 +169,8 @@ export default function ApplyToJobPage() {
 
         <DynamicFormRenderer
           mode="fill"
-          questions={job.screeningQuestions || []}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          questions={(job.screeningQuestions as any) || []}
           onSubmit={handleSubmit}
         />
       </main>

@@ -42,10 +42,7 @@ export const getJobApplicants = (
     .get<{ items: ApplicantDto[] }>(`/api/jobs/${jobId}/applicants`)
     .then((r) => r.data);
 
-export const getMyJobs = (
-  page = 1,
-  pageSize = 20
-): Promise<unknown> =>
+export const getMyJobs = (page = 1, pageSize = 20): Promise<unknown> =>
   axiosClient
     .get(`/api/jobs/mine`, { params: { page, pageSize } })
     .then((r) => r.data);

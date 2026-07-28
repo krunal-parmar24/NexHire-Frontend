@@ -87,7 +87,10 @@ export default function MyApplicationsPage() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white p-8 rounded-3xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-slate-100">
           <div>
             <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">
-              My <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Applications</span>
+              My{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                Applications
+              </span>
             </h1>
             <p className="mt-2 text-base text-slate-500 font-medium">
               Track and manage your submitted job applications.
@@ -106,8 +109,16 @@ export default function MyApplicationsPage() {
 
         {isLoading ? (
           <div className="flex flex-col gap-6">
-            <Skeleton width="100%" height="10rem" className="rounded-3xl shadow-sm" />
-            <Skeleton width="100%" height="10rem" className="rounded-3xl shadow-sm" />
+            <Skeleton
+              width="100%"
+              height="10rem"
+              className="rounded-3xl shadow-sm"
+            />
+            <Skeleton
+              width="100%"
+              height="10rem"
+              className="rounded-3xl shadow-sm"
+            />
           </div>
         ) : isError ? (
           <div className="bg-red-50 text-red-600 p-8 rounded-3xl border border-red-100 text-center font-semibold">
@@ -122,7 +133,8 @@ export default function MyApplicationsPage() {
               No applications yet
             </h3>
             <p className="text-slate-500 max-w-md mb-8 text-lg font-medium">
-              You haven&apos;t applied to any jobs yet. Start exploring opportunities to find your dream career!
+              You haven&apos;t applied to any jobs yet. Start exploring
+              opportunities to find your dream career!
             </p>
             <Link to="/">
               <Button
@@ -165,7 +177,7 @@ export default function MyApplicationsPage() {
                     <i className="pi pi-calendar"></i>
                     Applied {new Date(app.submittedAt).toLocaleDateString()}
                   </div>
-                  
+
                   <div className="flex gap-3 w-full sm:w-auto">
                     {(app.status === "Applied" ||
                       app.status === "Shortlisted" ||
@@ -178,7 +190,10 @@ export default function MyApplicationsPage() {
                         className="w-full sm:w-auto !bg-red-50 !text-red-600 !border-none hover:!bg-red-100 font-bold rounded-xl px-6 py-2.5 transition-colors"
                       />
                     )}
-                    <Link to={`/jobs/${app.jobId}`} className="w-full sm:w-auto">
+                    <Link
+                      to={`/jobs/${app.jobId}`}
+                      className="w-full sm:w-auto"
+                    >
                       <Button
                         label="View Job"
                         className="w-full sm:w-auto !bg-slate-100 !text-slate-700 !border-none hover:!bg-slate-200 font-bold rounded-xl px-6 py-2.5 transition-colors"

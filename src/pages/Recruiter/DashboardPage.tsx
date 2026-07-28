@@ -24,7 +24,11 @@ const StatCard = ({ title, value, icon, subtitle, accent }: StatCardProps) => (
         <p className={`text-4xl font-extrabold ${accent}`}>{value}</p>
         <p className="text-sm text-slate-400">{subtitle}</p>
       </div>
-      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${accent.replace("text-", "bg-").replace("-600", "-50")}`}>
+      <div
+        className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${accent
+          .replace("text-", "bg-")
+          .replace("-600", "-50")}`}
+      >
         <i className={`${icon} text-xl ${accent}`}></i>
       </div>
     </div>
@@ -32,7 +36,11 @@ const StatCard = ({ title, value, icon, subtitle, accent }: StatCardProps) => (
 );
 
 export default function DashboardPage() {
-  const { data: dashboard, isLoading: dashboardLoading, error: dashboardError } = useRecruiterDashboard();
+  const {
+    data: dashboard,
+    isLoading: dashboardLoading,
+    error: dashboardError,
+  } = useRecruiterDashboard();
   const { data: jobsData, isLoading: jobsLoading } = useMyJobsQuery(1, 5);
 
   useEffect(() => {
@@ -44,7 +52,6 @@ export default function DashboardPage() {
       <PublicHeader />
 
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col gap-8">
-
         {/* Page Header */}
         <div>
           <h1 className="text-3xl font-extrabold text-slate-900 mb-2">
@@ -98,11 +105,15 @@ export default function DashboardPage() {
             <div className="bg-white border border-slate-200/60 rounded-3xl p-6 sm:p-8 shadow-sm hover:border-slate-300 transition-colors">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex flex-col gap-2">
-                  <p className="text-sm font-semibold text-slate-500">Company Status</p>
+                  <p className="text-sm font-semibold text-slate-500">
+                    Company Status
+                  </p>
                   {dashboard?.verificationStatus === "Verified" ? (
                     <div className="flex items-center gap-2">
                       <i className="pi pi-verified text-emerald-500 text-xl"></i>
-                      <p className="text-2xl font-extrabold text-emerald-600">Verified</p>
+                      <p className="text-2xl font-extrabold text-emerald-600">
+                        Verified
+                      </p>
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
@@ -113,7 +124,9 @@ export default function DashboardPage() {
                     </div>
                   )}
                   <p className="text-sm text-slate-400">
-                    {dashboard?.verificationStatus === "Verified" ? "Full platform access" : "Awaiting admin approval"}
+                    {dashboard?.verificationStatus === "Verified"
+                      ? "Full platform access"
+                      : "Awaiting admin approval"}
                   </p>
                 </div>
               </div>
@@ -124,45 +137,77 @@ export default function DashboardPage() {
         {/* My Job Postings */}
         <div className="flex flex-col gap-4 mt-4">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-2xl font-bold text-slate-800">My Recent Postings</h2>
+            <h2 className="text-2xl font-bold text-slate-800">
+              My Recent Postings
+            </h2>
             {jobsData && jobsData.totalCount > 5 && (
-              <span className="text-sm font-semibold text-slate-500">Showing 5 of {jobsData.totalCount}</span>
+              <span className="text-sm font-semibold text-slate-500">
+                Showing 5 of {jobsData.totalCount}
+              </span>
             )}
           </div>
 
           {jobsLoading ? (
             <div className="flex flex-col gap-4">
-              <Skeleton width="100%" height="8rem" className="rounded-3xl shadow-sm" />
-              <Skeleton width="100%" height="8rem" className="rounded-3xl shadow-sm" />
+              <Skeleton
+                width="100%"
+                height="8rem"
+                className="rounded-3xl shadow-sm"
+              />
+              <Skeleton
+                width="100%"
+                height="8rem"
+                className="rounded-3xl shadow-sm"
+              />
             </div>
           ) : !jobsData || jobsData.items.length === 0 ? (
             <div className="bg-white border border-slate-200/60 rounded-3xl p-12 shadow-sm flex flex-col items-center justify-center text-center">
               <div className="w-20 h-20 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 text-3xl mb-6">
                 <i className="pi pi-briefcase"></i>
               </div>
-              <h3 className="text-2xl font-bold text-slate-800 mb-2">No active postings</h3>
-              <p className="text-slate-500 max-w-md text-base mb-6">You haven&apos;t posted any jobs yet.</p>
+              <h3 className="text-2xl font-bold text-slate-800 mb-2">
+                No active postings
+              </h3>
+              <p className="text-slate-500 max-w-md text-base mb-6">
+                You haven&apos;t posted any jobs yet.
+              </p>
               <Link to="/recruiter/jobs/new">
-                <Button label="Post your first job" className="!rounded-xl !bg-blue-600 hover:!bg-blue-700 !border-none !text-white px-6 py-2.5 font-bold shadow-md" />
+                <Button
+                  label="Post your first job"
+                  className="!rounded-xl !bg-blue-600 hover:!bg-blue-700 !border-none !text-white px-6 py-2.5 font-bold shadow-md"
+                />
               </Link>
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-4">
               {jobsData.items.map((job) => (
-                <div key={job.id} className="bg-white border border-slate-200/60 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row gap-6 justify-between items-start sm:items-center hover:border-slate-300 transition-colors">
+                <div
+                  key={job.id}
+                  className="bg-white border border-slate-200/60 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row gap-6 justify-between items-start sm:items-center hover:border-slate-300 transition-colors"
+                >
                   <div>
                     <h3 className="text-xl font-bold text-slate-900 mb-1">
                       {job.title}
                     </h3>
                     <div className="text-slate-500 font-medium mb-4 flex items-center gap-3 text-sm">
-                      <span className="flex items-center gap-1"><i className="pi pi-map-marker"></i> {job.location}</span>
+                      <span className="flex items-center gap-1">
+                        <i className="pi pi-map-marker"></i> {job.location}
+                      </span>
                       <span className="text-slate-300">•</span>
-                      <span className="flex items-center gap-1"><i className="pi pi-briefcase"></i> {job.jobType}</span>
+                      <span className="flex items-center gap-1">
+                        <i className="pi pi-briefcase"></i> {job.jobType}
+                      </span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Tag 
-                        value={job.status} 
-                        severity={job.status === "Active" ? "success" : job.status === "Draft" ? "info" : "danger"} 
+                      <Tag
+                        value={job.status}
+                        severity={
+                          job.status === "Active"
+                            ? "success"
+                            : job.status === "Draft"
+                            ? "info"
+                            : "danger"
+                        }
                         className="rounded-lg px-3 py-1 font-bold text-xs"
                       />
                       <span className="text-sm text-slate-400 font-medium">
@@ -171,7 +216,10 @@ export default function DashboardPage() {
                     </div>
                   </div>
                   <div className="shrink-0 w-full sm:w-auto">
-                    <Link to={`/recruiter/jobs/${job.id}/applicants`} className="w-full sm:w-auto">
+                    <Link
+                      to={`/recruiter/jobs/${job.id}/applicants`}
+                      className="w-full sm:w-auto"
+                    >
                       <Button
                         label="View Applicants"
                         icon="pi pi-users"
@@ -185,7 +233,6 @@ export default function DashboardPage() {
             </div>
           )}
         </div>
-
       </main>
     </div>
   );
