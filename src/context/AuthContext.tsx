@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [onboardingCompleted, setOnboardingCompleted] = useState(false);
 
   useEffect(() => {
-    // hydrate from localStorage
+
     const a = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
     const r = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
     const rr = localStorage.getItem(STORAGE_KEYS.ROLE);

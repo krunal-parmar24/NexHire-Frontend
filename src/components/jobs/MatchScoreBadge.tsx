@@ -121,7 +121,7 @@ export const MatchScoreBadge: React.FC<MatchScoreBadgeProps> = ({
         className="rounded-2xl border overflow-hidden"
         style={{ borderColor: color + "40", backgroundColor: bg }}
       >
-        {/* Summary header — always visible, click to toggle breakdown */}
+
         <button
           type="button"
           onClick={(e) => {
@@ -172,7 +172,7 @@ export const MatchScoreBadge: React.FC<MatchScoreBadgeProps> = ({
           </p>
         </button>
 
-        {/* Inline breakdown — expands below summary, no floating panel */}
+
         {open && (
           <div
             className="border-t px-5 pb-5 pt-4 bg-white/60"
@@ -219,7 +219,7 @@ export const MatchScoreBadge: React.FC<MatchScoreBadgeProps> = ({
         <span>{overallScore}% Match</span>
       </button>
 
-      {/* Inline dropdown anchored to the badge */}
+
       {open && (
         <div
           className="absolute left-0 mt-2 z-50 bg-white rounded-2xl shadow-2xl border border-slate-100"
@@ -227,7 +227,7 @@ export const MatchScoreBadge: React.FC<MatchScoreBadgeProps> = ({
           // Prevent any click inside from escaping
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Header row with close button */}
+
           <div className="flex items-center justify-between px-4 pt-4 pb-2">
             <div>
               <h4 className="text-sm font-extrabold text-slate-900 m-0">
@@ -259,7 +259,7 @@ export const MatchScoreBadge: React.FC<MatchScoreBadgeProps> = ({
           </div>
 
           <div className="px-4 pb-4">
-            {/* Overall bar */}
+
             <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden mb-4">
               <div
                 className="h-full rounded-full"

@@ -1,4 +1,4 @@
-/** F-32: Centralized localStorage / sessionStorage key constants. */
+/** Centralized localStorage / sessionStorage key constants. */
 export const STORAGE_KEYS = {
   ACCESS_TOKEN: "accessToken",
   REFRESH_TOKEN: "refreshToken",

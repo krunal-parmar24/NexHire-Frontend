@@ -8,7 +8,7 @@ import { useAuth } from "../../context/AuthContext";
 import PublicHeader from "../../components/PublicHeader";
 import { MatchScoreBadge } from "../../components/jobs/MatchScoreBadge";
 import LoginRegisterModal from "../../components/auth/LoginRegisterModal";
-import { STORAGE_KEYS } from "../../constants/storageKeys";
+
 import { Button } from "primereact/button";
 import { Skeleton } from "primereact/skeleton";
 import { Toast } from "primereact/toast";
@@ -19,13 +19,13 @@ export default function JobDetailPage() {
   const { accessToken } = useAuth();
   const toast = useRef<Toast>(null);
 
-  // Modal State
+
   const [loginModalVisible, setLoginModalVisible] = useState(false);
 
-  // Fetch Job
+
   const { data: job, isLoading, isError } = useJobQuery(id || "");
 
-  // SEO
+
   useEffect(() => {
     if (job?.title) {
       document.title = `${job.title} at ${job.companyName} | NexHire`;

@@ -1,6 +1,6 @@
 import type { TagProps } from "primereact/tag";
 
-/** F-31: Application status values, PrimeReact severity mapping, and pipeline stages.
+/** Application status values, PrimeReact severity mapping, and pipeline stages.
  * Shared by MyApplicationsPage (seeker severity map) and JobApplicantsPage (recruiter pipeline). */
 export const APPLICATION_STATUSES = [
   "Applied",

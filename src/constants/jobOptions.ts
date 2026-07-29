@@ -1,4 +1,4 @@
-/** F-30: Shared dropdown options for Job Type and Workplace Type selects.
+/** Shared dropdown options for Job Type and Workplace Type selects.
  * Used by JobListingPage (filter sidebar) and JobPostingPage (job form). */
 export const JOB_TYPE_OPTIONS = [
   { label: "Full-time", value: "Full-time" },

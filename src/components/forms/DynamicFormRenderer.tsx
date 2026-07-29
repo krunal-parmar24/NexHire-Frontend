@@ -108,7 +108,7 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = (
     e.preventDefault();
     if (!isFill) return;
 
-    // F-46: treat undefined and "" as missing — numeric 0 is a valid answer
+    // Treat undefined and "" as missing; numeric 0 is a valid answer
     const errors: Record<string, string> = {};
     for (const q of props.questions) {
       const val = localAnswers[q.id];
@@ -139,7 +139,7 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = (
 
   const setAnswer = (id: string, value: string | string[]) => {
     setLocalAnswers((prev) => ({ ...prev, [id]: value }));
-    // Clear field error on change
+
     setFieldErrors((prev) => ({ ...prev, [id]: "" }));
   };
 
@@ -234,8 +234,7 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = (
         );
       case "file upload":
         return (
-          // NOTE (F-17): SCREENING_FILE_UPLOAD_URL is not yet implemented on the backend.
-          // This field type stores a placeholder string only — no actual file is submitted.
+
           <FileUpload
             disabled={disabled}
             mode="basic"
@@ -255,7 +254,7 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = (
     }
   };
 
-  // F-35: Extracted to a pure render function to avoid re-creation on every render (React inner component anti-pattern)
+
   const renderQuestionItem = (q: ScreeningQuestion, idx: number) => (
     <div className="w-full" key={q.id}>
       {isBuilder ? (
@@ -333,7 +332,7 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = (
             {q.label} {q.required && <span className="text-red-500">*</span>}
           </label>
           {renderField(q)}
-          {/* F-16: Inline validation error instead of browser alert() */}
+
           {fieldErrors[q.id] && (
             <p role="alert" className="text-red-500 text-xs font-medium mt-1">
               {fieldErrors[q.id]}

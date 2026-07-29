@@ -1,4 +1,4 @@
-/** F-49: Shared Job-domain types mirroring backend DTOs.
+/** Shared Job-domain types mirroring backend DTOs.
  * These were previously scattered across api/hooks/useJobs.ts. */
 
 export interface JobListItem {

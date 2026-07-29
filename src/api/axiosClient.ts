@@ -11,7 +11,7 @@ const api = axios.create({
 let isRefreshing = false;
 let refreshPromise: Promise<string | null> | null = null;
 
-// F-15: Add _retry to request config type
+
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }

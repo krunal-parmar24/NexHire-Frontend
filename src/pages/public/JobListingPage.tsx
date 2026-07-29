@@ -4,12 +4,12 @@ import {
   useJobsQuery,
 } from "../../api/hooks/useJobs";
 import { useJobActions } from "../../api/hooks/useJobActions";
-import { useAuth } from "../../context/AuthContext";
+
 import PublicHeader from "../../components/PublicHeader";
 import { MatchScoreBadge } from "../../components/jobs/MatchScoreBadge";
 import LoginRegisterModal from "../../components/auth/LoginRegisterModal";
 import { JOB_TYPE_OPTIONS, REMOTE_TYPE_OPTIONS } from "../../constants/jobOptions";
-import { STORAGE_KEYS } from "../../constants/storageKeys";
+
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
@@ -18,11 +18,11 @@ import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
 import { Toast } from "primereact/toast";
 
 export default function JobListingPage() {
-  const { accessToken, role } = useAuth();
+
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
 
-  // Filter States
+
   const [keyword, setKeyword] = useState("");
   const [location, setLocation] = useState("");
   const [jobType, setJobType] = useState<string | null>(null);
@@ -30,15 +30,15 @@ export default function JobListingPage() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  // Modal State
+
   const [loginModalVisible, setLoginModalVisible] = useState(false);
 
-  // SEO
+
   useEffect(() => {
     document.title = "NexHire | Premium Tech Jobs Board";
   }, []);
 
-  // Fetch Jobs
+
   const { data, isLoading, isError, refetch } = useJobsQuery({
     keyword: keyword || undefined,
     location: location || undefined,

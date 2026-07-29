@@ -27,7 +27,7 @@ export default function MyApplicationsPage() {
   useEffect(() => {
     document.title = "My Applications | NexHire";
 
-    // Show success toast if coming from apply page
+
     if (location.state?.applied && !toastShown.current) {
       toastShown.current = true;
       toast.current?.show({
@@ -36,7 +36,7 @@ export default function MyApplicationsPage() {
         detail: "Application submitted successfully!",
         life: 5000,
       });
-      // Clear state so it doesn't re-trigger on refresh
+
       window.history.replaceState({}, document.title);
     }
   }, [location]);
