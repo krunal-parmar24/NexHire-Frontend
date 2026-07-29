@@ -5,6 +5,7 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
+import { STORAGE_KEYS } from "../constants/storageKeys";
 
 interface AuthContextValue {
   accessToken: string | null;
@@ -29,11 +30,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [onboardingCompleted, setOnboardingCompleted] = useState(false);
 
   useEffect(() => {
-    // hydrate from localStorage
-    const a = localStorage.getItem("accessToken");
-    const r = localStorage.getItem("refreshToken");
-    const rr = localStorage.getItem("role");
-    const o = localStorage.getItem("onboardingCompleted");
+    const a = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
+    const r = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
+    const rr = localStorage.getItem(STORAGE_KEYS.ROLE);
+    const o = localStorage.getItem(STORAGE_KEYS.ONBOARDING_COMPLETED);
     if (a && r) {
       setAccessToken(a);
       setRefreshToken(r);
@@ -52,10 +52,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setRefreshToken(refresh);
     setRole(roleVal);
     setOnboardingCompleted(onboarding);
-    localStorage.setItem("accessToken", access);
-    localStorage.setItem("refreshToken", refresh);
-    localStorage.setItem("role", roleVal);
-    localStorage.setItem("onboardingCompleted", onboarding ? "true" : "false");
+    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, access);
+    localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refresh);
+    localStorage.setItem(STORAGE_KEYS.ROLE, roleVal);
+    localStorage.setItem(
+      STORAGE_KEYS.ONBOARDING_COMPLETED,
+      onboarding ? "true" : "false"
+    );
   };
 
   const logout = () => {
@@ -63,10 +66,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setRefreshToken(null);
     setRole(null);
     setOnboardingCompleted(false);
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("role");
-    localStorage.removeItem("onboardingCompleted");
+    localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+    localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+    localStorage.removeItem(STORAGE_KEYS.ROLE);
+    localStorage.removeItem(STORAGE_KEYS.ONBOARDING_COMPLETED);
   };
 
   return (

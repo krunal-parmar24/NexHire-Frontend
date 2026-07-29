@@ -5,12 +5,11 @@ export async function uploadResume(
   userId: string
 ): Promise<string> {
   const fileExt = file.name.split(".").pop() || "pdf";
-  // Use a unique file name
+
   const fileName = `${userId}_${Date.now()}_resume.${fileExt}`;
 
-  // Standard Supabase upload
   const { error: uploadError } = await supabase.storage
-    .from("resume") // Using 'resume' based on user prompt 'created "resume" bucket'
+    .from("resume")
     .upload(fileName, file, {
       cacheControl: "3600",
       upsert: false,
@@ -21,7 +20,6 @@ export async function uploadResume(
     throw new Error(`Failed to upload resume: ${uploadError.message}`);
   }
 
-  // Get public URL
   const { data: publicUrlData } = supabase.storage
     .from("resume")
     .getPublicUrl(fileName);

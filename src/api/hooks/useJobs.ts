@@ -1,79 +1,39 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import api from "../axiosClient";
 import {
   getJobApplicants,
   ApplicantDto,
   getJobMatchScore,
   MatchScoreResponse,
+  getJobsList,
+  getJobById,
+  getSavedJobIds,
+  toggleSaveJob,
+  getMyJobsList,
 } from "../endpoints/jobs";
+import type {
+  JobListResponse,
+  JobDetailResponse,
+  JobsQueryFilters,
+} from "../../types/job";
 
-export interface ScreeningQuestion {
-  id: string;
-  label: string;
-  type: string;
-  required: boolean;
-}
-
-export interface JobListItem {
-  id: string;
-  title: string;
-  companyName: string;
-  location: string;
-  jobType: string;
-  remoteType: string;
-  status: string;
-  createdAt: string;
-}
-
-export interface JobListResponse {
-  items: JobListItem[];
-  totalCount: number;
-  page: number;
-  pageSize: number;
-}
-
-export interface JobDetailResponse {
-  id: string;
-  title: string;
-  companyName: string;
-  description: string;
-  requirements: string;
-  location: string;
-  jobType: string;
-  salaryRange?: string;
-  remoteType: string;
-  status: string;
-  screeningQuestions: ScreeningQuestion[];
-}
-
-export interface JobsQueryFilters {
-  keyword?: string;
-  location?: string;
-  jobType?: string;
-  remoteType?: string;
-  page?: number;
-  pageSize?: number;
-}
+export type {
+  JobListItem,
+  JobListResponse,
+  JobDetailResponse,
+  JobsQueryFilters,
+} from "../../types/job";
 
 export const useJobsQuery = (filters: JobsQueryFilters) => {
   return useQuery<JobListResponse>({
     queryKey: ["jobs", filters],
-    queryFn: async () => {
-      const res = await api.get<JobListResponse>("/api/jobs", {
-        params: filters,
-      });
-      return res.data;
-    },
+    queryFn: () => getJobsList(filters),
   });
 };
 
 export const useJobQuery = (id: string) => {
   return useQuery<JobDetailResponse>({
     queryKey: ["job", id],
-    queryFn: async () => {
-      const res = await api.get<JobDetailResponse>(`/api/jobs/${id}`);
-      return res.data;
-    },
+    queryFn: () => getJobById(id),
     enabled: !!id,
   });
 };
@@ -81,10 +41,7 @@ export const useJobQuery = (id: string) => {
 export const useSavedJobIdsQuery = (isAuthenticated: boolean) => {
   return useQuery<string[]>({
     queryKey: ["savedJobs"],
-    queryFn: async () => {
-      const res = await api.get<string[]>("/api/jobs/saved");
-      return res.data;
-    },
+    queryFn: getSavedJobIds,
     enabled: isAuthenticated,
   });
 };
@@ -92,12 +49,7 @@ export const useSavedJobIdsQuery = (isAuthenticated: boolean) => {
 export const useToggleSaveJobMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (jobId: string) => {
-      const res = await api.post<{ isSaved: boolean }>(
-        `/api/jobs/${jobId}/save`
-      );
-      return { jobId, isSaved: res.data.isSaved };
-    },
+    mutationFn: toggleSaveJob,
     onMutate: async (jobId) => {
       await queryClient.cancelQueries({ queryKey: ["savedJobs"] });
       const previousSavedJobs = queryClient.getQueryData<string[]>([
@@ -113,7 +65,7 @@ export const useToggleSaveJobMutation = () => {
 
       return { previousSavedJobs };
     },
-    onError: (err, variables, context) => {
+    onError: (_err, _variables, context) => {
       if (context?.previousSavedJobs) {
         queryClient.setQueryData(["savedJobs"], context.previousSavedJobs);
       }
@@ -135,12 +87,7 @@ export const useJobApplicantsQuery = (jobId: string) => {
 export const useMyJobsQuery = (page = 1, pageSize = 20) => {
   return useQuery<JobListResponse>({
     queryKey: ["my-jobs", page, pageSize],
-    queryFn: async () => {
-      const res = await api.get<JobListResponse>("/api/jobs/mine", {
-        params: { page, pageSize },
-      });
-      return res.data;
-    },
+    queryFn: () => getMyJobsList(page, pageSize),
   });
 };
 
@@ -149,6 +96,6 @@ export const useMatchScoreQuery = (jobId: string, isAuthenticated: boolean) => {
     queryKey: ["match-score", jobId],
     queryFn: () => getJobMatchScore(jobId),
     enabled: !!jobId && isAuthenticated,
-    retry: false, // Don't retry if 401 or 404
+    retry: false,
   });
 };

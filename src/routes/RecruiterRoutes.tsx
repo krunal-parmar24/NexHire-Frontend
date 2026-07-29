@@ -1,8 +1,8 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import JobPostingPage from "../pages/Recruiter/JobPostingPage";
-import DashboardPage from "../pages/Recruiter/DashboardPage";
-import JobApplicantsPage from "../pages/Recruiter/JobApplicantsPage";
+import JobPostingPage from "../pages/recruiter/JobPostingPage";
+import DashboardPage from "../pages/recruiter/DashboardPage";
+import JobApplicantsPage from "../pages/recruiter/JobApplicantsPage";
 
 export default function RecruiterRoutes() {
   return (

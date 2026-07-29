@@ -9,15 +9,14 @@ import { Button } from "primereact/button";
 import { Tag } from "primereact/tag";
 import { useJobApplicantsQuery, useJobQuery } from "../../api/hooks/useJobs";
 import { useUpdateApplicationStatus } from "../../api/hooks/useApplications";
+import { ApplicantDto } from "../../api/endpoints/jobs";
+import {
+  PIPELINE_STATUS_OPTIONS,
+  APPLICATION_STATUSES,
+  APPLICATION_STATUS_SEVERITY,
+  ApplicationStatus,
+} from "../../constants/applicationStatus";
 import PublicHeader from "../../components/PublicHeader";
-
-const STATUS_OPTIONS = [
-  { label: "Applied", value: "Applied", severity: "info" },
-  { label: "Shortlisted", value: "Shortlisted", severity: "warning" },
-  { label: "Interview", value: "Interview", severity: "help" },
-  { label: "Hired", value: "Hired", severity: "success" },
-  { label: "Rejected", value: "Rejected", severity: "danger" },
-];
 
 export default function JobApplicantsPage() {
   const { id } = useParams<{ id: string }>();
@@ -51,8 +50,7 @@ export default function JobApplicantsPage() {
     updateStatus({ id: applicationId, status: newStatus });
   };
 
-  const statusBodyTemplate = (rowData: unknown) => {
-    const row = rowData as { status: string; applicationId: string };
+  const statusBodyTemplate = (row: ApplicantDto) => {
     if (row.status === "Withdrawn") {
       return (
         <Tag
@@ -66,49 +64,40 @@ export default function JobApplicantsPage() {
     return (
       <Dropdown
         value={row.status}
-        options={STATUS_OPTIONS.map((s) => ({
-          label: s.label,
-          value: s.value,
-        }))}
+        options={PIPELINE_STATUS_OPTIONS}
         onChange={(e) => handleStatusChange(row.applicationId, e.value)}
         className="w-full md:w-[12rem] !border-slate-200 !rounded-xl !shadow-none focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100"
       />
     );
   };
 
-  const answersBodyTemplate = (rowData: unknown) => {
-    const row = rowData as {
-      answers?: { questionId: string; value: string }[];
-    };
+  const answersBodyTemplate = (row: ApplicantDto) => {
     if (!row.answers || row.answers.length === 0)
       return <span className="text-slate-400 italic text-sm">No answers</span>;
     return (
       <div className="flex flex-col gap-2 py-2">
-        {row.answers.map(
-          (ans: { questionId: string; value: string }, idx: number) => {
-            const label =
-              questionLabelMap[ans.questionId] || `Question ${idx + 1}`;
-            return (
-              <div
-                key={ans.questionId || idx}
-                className="flex flex-col gap-0.5 text-sm"
-              >
-                <span className="font-semibold text-slate-600 text-xs">
-                  {label}
-                </span>
-                <span className="text-slate-800">
-                  {ans.value || <em className="text-slate-400">No answer</em>}
-                </span>
-              </div>
-            );
-          }
-        )}
+        {row.answers.map((ans, idx) => {
+          const label =
+            questionLabelMap[ans.questionId] || `Question ${idx + 1}`;
+          return (
+            <div
+              key={ans.questionId || idx}
+              className="flex flex-col gap-0.5 text-sm"
+            >
+              <span className="font-semibold text-slate-600 text-xs">
+                {label}
+              </span>
+              <span className="text-slate-800">
+                {ans.value || <em className="text-slate-400">No answer</em>}
+              </span>
+            </div>
+          );
+        })}
       </div>
     );
   };
 
-  const resumeBodyTemplate = (rowData: unknown) => {
-    const row = rowData as { resumeUrl?: string };
+  const resumeBodyTemplate = (row: ApplicantDto) => {
     if (!row.resumeUrl) return <span className="text-slate-400">N/A</span>;
     return (
       <a
@@ -132,7 +121,7 @@ export default function JobApplicantsPage() {
         <div className="flex flex-col gap-4">
           <nav className="flex items-center gap-2 text-sm font-medium text-slate-500">
             <Link
-              to="/recruiter/dashboard"
+              to="/recruiter"
               className="hover:text-blue-600 transition-colors flex items-center gap-1"
             >
               <i className="pi pi-arrow-left text-xs"></i> Dashboard
@@ -231,14 +220,15 @@ export default function JobApplicantsPage() {
               >
                 <div className="p-4 m-4 flex flex-col gap-4">
                   {/* Active pipeline stages — vertical flex list */}
-                  {[
-                    ...STATUS_OPTIONS,
-                    {
-                      label: "Withdrawn",
-                      value: "Withdrawn",
-                      severity: "secondary" as const,
-                    },
-                  ].map((statusObj) => {
+                  {APPLICATION_STATUSES.map((status) => {
+                    const statusObj = {
+                      label: status,
+                      value: status,
+                      severity:
+                        APPLICATION_STATUS_SEVERITY[
+                          status as ApplicationStatus
+                        ],
+                    };
                     const columnApplicants = applicants.filter(
                       (a) => a.status === statusObj.value
                     );

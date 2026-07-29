@@ -12,6 +12,7 @@ import { InputNumber } from "primereact/inputnumber";
 import { RadioButton } from "primereact/radiobutton";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
+import { SCREENING_FILE_UPLOAD_URL } from "../../constants/config";
 
 export type DynamicFormRendererProps =
   | {
@@ -67,6 +68,7 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = (
   const [localAnswers, setLocalAnswers] = useState<
     Record<string, string | string[]>
   >({});
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const handleQuestionChange = (
     index: number,
@@ -106,14 +108,25 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = (
     e.preventDefault();
     if (!isFill) return;
 
-    // Validate required
+    // Treat undefined and "" as missing; numeric 0 is a valid answer
+    const errors: Record<string, string> = {};
     for (const q of props.questions) {
-      if (q.required && !localAnswers[q.id]) {
-        alert(`Please answer: ${q.label}`);
-        return;
+      const val = localAnswers[q.id];
+      const isMissing =
+        val === undefined ||
+        val === "" ||
+        (Array.isArray(val) && val.length === 0);
+      if (q.required && isMissing) {
+        errors[q.id] = `"${q.label}" is required.`;
       }
     }
 
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+
+    setFieldErrors({});
     const formattedAnswers: ScreeningAnswer[] = Object.entries(
       localAnswers
     ).map(([id, val]) => ({
@@ -122,6 +135,12 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = (
     }));
 
     props.onSubmit(formattedAnswers);
+  };
+
+  const setAnswer = (id: string, value: string | string[]) => {
+    setLocalAnswers((prev) => ({ ...prev, [id]: value }));
+
+    setFieldErrors((prev) => ({ ...prev, [id]: "" }));
   };
 
   const renderField = (q: ScreeningQuestion) => {
@@ -134,25 +153,20 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = (
           <InputText
             disabled={disabled}
             value={(val as string) || ""}
-            onChange={(e) =>
-              setLocalAnswers({ ...localAnswers, [q.id]: e.target.value })
-            }
-            className="w-full !rounded-xl !border-slate-200 focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100 !py-2.5 !shadow-none"
+            onChange={(e) => setAnswer(q.id, e.target.value)}
+            aria-required={q.required}
+            className="w-full !rounded-xl !border-slate-200 focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100 !shadow-none"
           />
         );
       case "numeric":
         return (
           <InputNumber
             disabled={disabled}
-            value={val ? Number(val) : null}
-            onValueChange={(e) =>
-              setLocalAnswers({
-                ...localAnswers,
-                [q.id]: e.value?.toString() || "",
-              })
-            }
+            value={val !== undefined && val !== "" ? Number(val) : null}
+            onValueChange={(e) => setAnswer(q.id, e.value?.toString() ?? "")}
+            aria-required={q.required}
             className="w-full"
-            inputClassName="w-full !rounded-xl !border-slate-200 focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100 !py-2.5 !shadow-none"
+            inputClassName="w-full !rounded-xl !border-slate-200 focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100 !shadow-none"
           />
         );
       case "single-select":
@@ -161,10 +175,9 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = (
             disabled={disabled}
             value={val}
             options={q.options || []}
-            onChange={(e) =>
-              setLocalAnswers({ ...localAnswers, [q.id]: e.value })
-            }
+            onChange={(e) => setAnswer(q.id, e.value)}
             placeholder="Select an option"
+            aria-required={q.required}
             className="w-full !rounded-xl !border-slate-200 focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100 !shadow-none"
           />
         );
@@ -174,24 +187,25 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = (
             disabled={disabled}
             value={val || []}
             options={q.options || []}
-            onChange={(e) =>
-              setLocalAnswers({ ...localAnswers, [q.id]: e.value })
-            }
+            onChange={(e) => setAnswer(q.id, e.value)}
             placeholder="Select options"
+            aria-required={q.required}
             className="w-full !rounded-xl !border-slate-200 focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100 !shadow-none"
           />
         );
       case "yes/no":
         return (
-          <div className="flex gap-6 mt-1">
+          <div
+            className="flex gap-6 mt-1"
+            role="group"
+            aria-required={q.required}
+          >
             <div className="flex items-center">
               <RadioButton
                 disabled={disabled}
                 inputId={`${q.id}_yes`}
                 value="Yes"
-                onChange={(e) =>
-                  setLocalAnswers({ ...localAnswers, [q.id]: e.value })
-                }
+                onChange={(e) => setAnswer(q.id, e.value)}
                 checked={val === "Yes"}
               />
               <label
@@ -206,9 +220,7 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = (
                 disabled={disabled}
                 inputId={`${q.id}_no`}
                 value="No"
-                onChange={(e) =>
-                  setLocalAnswers({ ...localAnswers, [q.id]: e.value })
-                }
+                onChange={(e) => setAnswer(q.id, e.value)}
                 checked={val === "No"}
               />
               <label
@@ -226,12 +238,10 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = (
             disabled={disabled}
             mode="basic"
             name="demo[]"
-            url="/api/upload"
+            url={SCREENING_FILE_UPLOAD_URL}
             accept="image/*,application/pdf"
             maxFileSize={1000000}
-            onSelect={() =>
-              setLocalAnswers({ ...localAnswers, [q.id]: "uploaded_file.pdf" })
-            }
+            onSelect={() => setAnswer(q.id, "uploaded_file.pdf")}
             chooseOptions={{
               className:
                 "!rounded-xl !bg-blue-50 !text-blue-700 !border-none hover:!bg-blue-100 font-bold",
@@ -242,6 +252,94 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = (
         return null;
     }
   };
+
+  const renderQuestionItem = (q: ScreeningQuestion, idx: number) => (
+    <div className="w-full" key={q.id}>
+      {isBuilder ? (
+        <div className="p-6 border border-slate-200 rounded-2xl flex flex-col gap-5 bg-slate-50/50 relative group">
+          <div className="flex items-center justify-between">
+            <span className="font-bold text-slate-700">Question {idx + 1}</span>
+            <Button
+              type="button"
+              icon="pi pi-trash"
+              text
+              rounded
+              onClick={() => handleRemoveQuestion(idx)}
+              className="!text-red-500 hover:!bg-red-50"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-bold text-slate-700">Label</label>
+              <InputText
+                value={q.label}
+                onChange={(e) =>
+                  handleQuestionChange(idx, "label", e.target.value)
+                }
+                className="w-full !rounded-xl !border-slate-200 focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100 !shadow-none"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-bold text-slate-700">Type</label>
+              <Dropdown
+                value={q.type}
+                options={questionTypes}
+                onChange={(e) => handleQuestionChange(idx, "type", e.value)}
+                className="w-full !rounded-xl !border-slate-200 focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100 !shadow-none"
+              />
+            </div>
+          </div>
+
+          {(q.type === "single-select" || q.type === "multi-select") && (
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-bold text-slate-700">
+                Options (comma-separated)
+              </label>
+              <InputText
+                value={q.options?.join(", ") || ""}
+                onChange={(e) =>
+                  handleQuestionChange(
+                    idx,
+                    "options",
+                    e.target.value.split(",").map((s) => s.trim())
+                  )
+                }
+                className="w-full !rounded-xl !border-slate-200 focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100 !shadow-none"
+              />
+            </div>
+          )}
+
+          <div className="flex items-center mt-2">
+            <Checkbox
+              inputId={`req_${q.id}`}
+              checked={q.required}
+              onChange={(e) => handleQuestionChange(idx, "required", e.checked)}
+            />
+            <label
+              htmlFor={`req_${q.id}`}
+              className="ml-2 font-medium text-slate-700 cursor-pointer"
+            >
+              Required
+            </label>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-bold text-slate-700">
+            {q.label} {q.required && <span className="text-red-500">*</span>}
+          </label>
+          {renderField(q)}
+
+          {fieldErrors[q.id] && (
+            <p role="alert" className="text-red-500 text-xs font-medium mt-1">
+              {fieldErrors[q.id]}
+            </p>
+          )}
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <div className="bg-white border border-slate-200/60 rounded-3xl p-6 sm:p-8 shadow-sm">
@@ -276,7 +374,7 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = (
 
       {isFill ? (
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-          {renderQuestionsList()}
+          {props.questions.map((q, idx) => renderQuestionItem(q, idx))}
           {props.questions.length > 0 && (
             <Button
               type="submit"
@@ -286,98 +384,10 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = (
           )}
         </form>
       ) : (
-        <div className="flex flex-col gap-6">{renderQuestionsList()}</div>
+        <div className="flex flex-col gap-6">
+          {props.questions.map((q, idx) => renderQuestionItem(q, idx))}
+        </div>
       )}
     </div>
   );
-
-  function renderQuestionsList() {
-    return props.questions.map((q, idx) => (
-      <div key={q.id} className="w-full">
-        {isBuilder ? (
-          <div className="p-6 border border-slate-200 rounded-2xl flex flex-col gap-5 bg-slate-50/50 relative group">
-            <div className="flex items-center justify-between">
-              <span className="font-bold text-slate-700">
-                Question {idx + 1}
-              </span>
-              <Button
-                type="button"
-                icon="pi pi-trash"
-                text
-                rounded
-                onClick={() => handleRemoveQuestion(idx)}
-                className="!text-red-500 hover:!bg-red-50"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-slate-700">
-                  Label
-                </label>
-                <InputText
-                  value={q.label}
-                  onChange={(e) =>
-                    handleQuestionChange(idx, "label", e.target.value)
-                  }
-                  className="w-full !rounded-xl !border-slate-200 focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100 !py-2.5 !shadow-none"
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-slate-700">Type</label>
-                <Dropdown
-                  value={q.type}
-                  options={questionTypes}
-                  onChange={(e) => handleQuestionChange(idx, "type", e.value)}
-                  className="w-full !rounded-xl !border-slate-200 focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100 !shadow-none"
-                />
-              </div>
-            </div>
-
-            {(q.type === "single-select" || q.type === "multi-select") && (
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-slate-700">
-                  Options (comma-separated)
-                </label>
-                <InputText
-                  value={q.options?.join(", ") || ""}
-                  onChange={(e) =>
-                    handleQuestionChange(
-                      idx,
-                      "options",
-                      e.target.value.split(",").map((s) => s.trim())
-                    )
-                  }
-                  className="w-full !rounded-xl !border-slate-200 focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100 !py-2.5 !shadow-none"
-                />
-              </div>
-            )}
-
-            <div className="flex items-center mt-2">
-              <Checkbox
-                inputId={`req_${q.id}`}
-                checked={q.required}
-                onChange={(e) =>
-                  handleQuestionChange(idx, "required", e.checked)
-                }
-              />
-              <label
-                htmlFor={`req_${q.id}`}
-                className="ml-2 font-medium text-slate-700 cursor-pointer"
-              >
-                Required
-              </label>
-            </div>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-bold text-slate-700">
-              {q.label} {q.required && <span className="text-red-500">*</span>}
-            </label>
-            {renderField(q)}
-          </div>
-        )}
-      </div>
-    ));
-  }
 };
