@@ -1,14 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  useJobsQuery,
-} from "../../api/hooks/useJobs";
+import { useJobsQuery } from "../../api/hooks/useJobs";
 import { useJobActions } from "../../api/hooks/useJobActions";
 
 import PublicHeader from "../../components/PublicHeader";
 import { MatchScoreBadge } from "../../components/jobs/MatchScoreBadge";
 import LoginRegisterModal from "../../components/auth/LoginRegisterModal";
-import { JOB_TYPE_OPTIONS, REMOTE_TYPE_OPTIONS } from "../../constants/jobOptions";
+import {
+  JOB_TYPE_OPTIONS,
+  REMOTE_TYPE_OPTIONS,
+} from "../../constants/jobOptions";
 
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
@@ -18,10 +19,8 @@ import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
 import { Toast } from "primereact/toast";
 
 export default function JobListingPage() {
-
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
-
 
   const [keyword, setKeyword] = useState("");
   const [location, setLocation] = useState("");
@@ -30,14 +29,11 @@ export default function JobListingPage() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-
   const [loginModalVisible, setLoginModalVisible] = useState(false);
-
 
   useEffect(() => {
     document.title = "NexHire | Premium Tech Jobs Board";
   }, []);
-
 
   const { data, isLoading, isError, refetch } = useJobsQuery({
     keyword: keyword || undefined,
@@ -47,7 +43,6 @@ export default function JobListingPage() {
     page,
     pageSize,
   });
-
 
   const handleResetFilters = () => {
     setKeyword("");
@@ -62,7 +57,10 @@ export default function JobListingPage() {
     setPageSize(e.rows);
   };
 
-  const { handleApply, handleSave, savedJobsSet, isSaving } = useJobActions(toast, setLoginModalVisible);
+  const { handleApply, handleSave, savedJobsSet, isSaving } = useJobActions(
+    toast,
+    setLoginModalVisible
+  );
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-sans">

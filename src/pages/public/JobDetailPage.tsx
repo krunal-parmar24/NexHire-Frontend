@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import {
-  useJobQuery,
-} from "../../api/hooks/useJobs";
+import { useJobQuery } from "../../api/hooks/useJobs";
 import { useJobActions } from "../../api/hooks/useJobActions";
 import { useAuth } from "../../context/AuthContext";
 import PublicHeader from "../../components/PublicHeader";
@@ -19,12 +17,9 @@ export default function JobDetailPage() {
   const { accessToken } = useAuth();
   const toast = useRef<Toast>(null);
 
-
   const [loginModalVisible, setLoginModalVisible] = useState(false);
 
-
   const { data: job, isLoading, isError } = useJobQuery(id || "");
-
 
   useEffect(() => {
     if (job?.title) {
@@ -34,7 +29,10 @@ export default function JobDetailPage() {
     }
   }, [job]);
 
-  const { handleApply, handleSave, savedJobsSet, isSaving } = useJobActions(toast, setLoginModalVisible);
+  const { handleApply, handleSave, savedJobsSet, isSaving } = useJobActions(
+    toast,
+    setLoginModalVisible
+  );
   const isSaved = id ? savedJobsSet.has(id) : false;
 
   const handleMessage = () => {

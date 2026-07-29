@@ -112,11 +112,12 @@ export default function ApplyToJobPage() {
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-[2rem] p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-6 justify-between shadow-sm">
               <div>
                 <h3 className="font-bold text-blue-900 text-lg mb-1 flex items-center gap-2">
-                  <i className="pi pi-sparkles text-blue-600"></i> Autofill with AI
+                  <i className="pi pi-sparkles text-blue-600"></i> Autofill with
+                  AI
                 </h3>
                 <p className="text-sm text-blue-700/80">
-                  Save time! Let NexHire AI draft answers based on your profile and
-                  resume.
+                  Save time! Let NexHire AI draft answers based on your profile
+                  and resume.
                 </p>
               </div>
               <Button
@@ -131,7 +132,9 @@ export default function ApplyToJobPage() {
               {isUploading && (
                 <div className="absolute inset-0 bg-white/70 backdrop-blur-sm z-10 flex flex-col items-center justify-center">
                   <i className="pi pi-spin pi-spinner text-4xl text-blue-600 mb-4"></i>
-                  <p className="text-slate-700 font-medium">Uploading Resume...</p>
+                  <p className="text-slate-700 font-medium">
+                    Uploading Resume...
+                  </p>
                 </div>
               )}
               <h2 className="text-xl font-bold text-slate-800 mb-4">
@@ -147,7 +150,9 @@ export default function ApplyToJobPage() {
                 maxFileSize={1000000}
                 onSelect={(e) => setResumeFile(e.files[0])}
                 onClear={() => setResumeFile(null)}
-                chooseLabel={resumeFile ? resumeFile.name : "Choose Resume (PDF)"}
+                chooseLabel={
+                  resumeFile ? resumeFile.name : "Choose Resume (PDF)"
+                }
                 className="w-full md:w-auto"
               />
             </div>

@@ -234,7 +234,6 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = (
         );
       case "file upload":
         return (
-
           <FileUpload
             disabled={disabled}
             mode="basic"
@@ -253,7 +252,6 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = (
         return null;
     }
   };
-
 
   const renderQuestionItem = (q: ScreeningQuestion, idx: number) => (
     <div className="w-full" key={q.id}>

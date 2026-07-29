@@ -31,8 +31,12 @@ export const updateJob = (
 ): Promise<JobResponse> =>
   api.put<JobResponse>(`/api/jobs/${id}`, data).then((r) => r.data);
 
-export const getJobsList = (filters: JobsQueryFilters): Promise<JobListResponse> =>
-  api.get<JobListResponse>("/api/jobs", { params: filters }).then((r) => r.data);
+export const getJobsList = (
+  filters: JobsQueryFilters
+): Promise<JobListResponse> =>
+  api
+    .get<JobListResponse>("/api/jobs", { params: filters })
+    .then((r) => r.data);
 
 export const getJobById = (id: string): Promise<JobDetailResponse> =>
   api.get<JobDetailResponse>(`/api/jobs/${id}`).then((r) => r.data);
@@ -40,7 +44,9 @@ export const getJobById = (id: string): Promise<JobDetailResponse> =>
 export const getSavedJobIds = (): Promise<string[]> =>
   api.get<string[]>("/api/jobs/saved").then((r) => r.data);
 
-export const toggleSaveJob = (jobId: string): Promise<{ jobId: string; isSaved: boolean }> =>
+export const toggleSaveJob = (
+  jobId: string
+): Promise<{ jobId: string; isSaved: boolean }> =>
   api
     .post<{ isSaved: boolean }>(`/api/jobs/${jobId}/save`)
     .then((r) => ({ jobId, isSaved: r.data.isSaved }));
@@ -61,7 +67,10 @@ export const getJobApplicants = (
     .get<{ items: ApplicantDto[] }>(`/api/jobs/${jobId}/applicants`)
     .then((r) => r.data);
 
-export const getMyJobsList = (page = 1, pageSize = 20): Promise<JobListResponse> =>
+export const getMyJobsList = (
+  page = 1,
+  pageSize = 20
+): Promise<JobListResponse> =>
   api
     .get<JobListResponse>(`/api/jobs/mine`, { params: { page, pageSize } })
     .then((r) => r.data);

@@ -18,7 +18,6 @@ import {
 } from "../../constants/applicationStatus";
 import PublicHeader from "../../components/PublicHeader";
 
-
 export default function JobApplicantsPage() {
   const { id } = useParams<{ id: string }>();
 
@@ -77,25 +76,23 @@ export default function JobApplicantsPage() {
       return <span className="text-slate-400 italic text-sm">No answers</span>;
     return (
       <div className="flex flex-col gap-2 py-2">
-        {row.answers.map(
-          (ans, idx) => {
-            const label =
-              questionLabelMap[ans.questionId] || `Question ${idx + 1}`;
-            return (
-              <div
-                key={ans.questionId || idx}
-                className="flex flex-col gap-0.5 text-sm"
-              >
-                <span className="font-semibold text-slate-600 text-xs">
-                  {label}
-                </span>
-                <span className="text-slate-800">
-                  {ans.value || <em className="text-slate-400">No answer</em>}
-                </span>
-              </div>
-            );
-          }
-        )}
+        {row.answers.map((ans, idx) => {
+          const label =
+            questionLabelMap[ans.questionId] || `Question ${idx + 1}`;
+          return (
+            <div
+              key={ans.questionId || idx}
+              className="flex flex-col gap-0.5 text-sm"
+            >
+              <span className="font-semibold text-slate-600 text-xs">
+                {label}
+              </span>
+              <span className="text-slate-800">
+                {ans.value || <em className="text-slate-400">No answer</em>}
+              </span>
+            </div>
+          );
+        })}
       </div>
     );
   };
@@ -227,7 +224,10 @@ export default function JobApplicantsPage() {
                     const statusObj = {
                       label: status,
                       value: status,
-                      severity: APPLICATION_STATUS_SEVERITY[status as ApplicationStatus],
+                      severity:
+                        APPLICATION_STATUS_SEVERITY[
+                          status as ApplicationStatus
+                        ],
                     };
                     const columnApplicants = applicants.filter(
                       (a) => a.status === statusObj.value

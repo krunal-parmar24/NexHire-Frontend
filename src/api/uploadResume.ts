@@ -8,7 +8,6 @@ export async function uploadResume(
 
   const fileName = `${userId}_${Date.now()}_resume.${fileExt}`;
 
-
   const { error: uploadError } = await supabase.storage
     .from("resume")
     .upload(fileName, file, {
@@ -20,7 +19,6 @@ export async function uploadResume(
     console.error("Supabase Upload Error:", uploadError);
     throw new Error(`Failed to upload resume: ${uploadError.message}`);
   }
-
 
   const { data: publicUrlData } = supabase.storage
     .from("resume")

@@ -9,7 +9,6 @@ import { StatCard } from "../../components/recruiter/StatCard";
 import UnverifiedBadge from "../../components/recruiter/UnverifiedBadge";
 import PublicHeader from "../../components/PublicHeader";
 
-
 export default function DashboardPage() {
   const {
     data: dashboard,

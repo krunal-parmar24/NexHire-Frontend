@@ -16,7 +16,12 @@ import type {
   JobsQueryFilters,
 } from "../../types/job";
 
-export type { JobListItem, JobListResponse, JobDetailResponse, JobsQueryFilters } from "../../types/job";
+export type {
+  JobListItem,
+  JobListResponse,
+  JobDetailResponse,
+  JobsQueryFilters,
+} from "../../types/job";
 
 export const useJobsQuery = (filters: JobsQueryFilters) => {
   return useQuery<JobListResponse>({
@@ -47,7 +52,9 @@ export const useToggleSaveJobMutation = () => {
     mutationFn: toggleSaveJob,
     onMutate: async (jobId) => {
       await queryClient.cancelQueries({ queryKey: ["savedJobs"] });
-      const previousSavedJobs = queryClient.getQueryData<string[]>(["savedJobs"]);
+      const previousSavedJobs = queryClient.getQueryData<string[]>([
+        "savedJobs",
+      ]);
 
       queryClient.setQueryData<string[]>(["savedJobs"], (old) => {
         if (!old) return [];

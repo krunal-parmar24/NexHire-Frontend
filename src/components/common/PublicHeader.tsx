@@ -19,7 +19,6 @@ export default function PublicHeader() {
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 px-6 py-4 flex items-center justify-between shadow-sm relative overflow-hidden">
-
       <Link
         to="/"
         className="flex items-center no-underline group h-10 translate-y-1 md:translate-y-1.5"
@@ -30,7 +29,6 @@ export default function PublicHeader() {
           className="h-10 object-contain scale-[3] origin-left group-hover:scale-[3.05] transition-transform"
         />
       </Link>
-
 
       <div className="flex items-center gap-4 z-10">
         {accessToken ? (
@@ -90,6 +88,5 @@ export default function PublicHeader() {
 
   function setTabAndShow() {
     setModalVisible(true);
-
   }
 }

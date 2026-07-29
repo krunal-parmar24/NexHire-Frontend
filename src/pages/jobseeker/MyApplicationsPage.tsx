@@ -27,7 +27,6 @@ export default function MyApplicationsPage() {
   useEffect(() => {
     document.title = "My Applications | NexHire";
 
-
     if (location.state?.applied && !toastShown.current) {
       toastShown.current = true;
       toast.current?.show({
@@ -73,7 +72,6 @@ export default function MyApplicationsPage() {
       },
     });
   };
-
 
   return (
     <div className="min-h-screen bg-slate-50/50 flex flex-col font-sans pb-32">
@@ -183,8 +181,8 @@ export default function MyApplicationsPage() {
 
                   <div className="flex gap-3 w-full sm:w-auto">
                     {WITHDRAWABLE_STATUSES.includes(
-                    app.status as ApplicationStatus
-                  ) && (
+                      app.status as ApplicationStatus
+                    ) && (
                       <Button
                         label="Withdraw"
                         icon="pi pi-times"

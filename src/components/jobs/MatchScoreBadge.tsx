@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useMatchScoreQuery } from "../../api/hooks/useJobs";
 import { useAuth } from "../../context/AuthContext";
-import { MatchScoreResponse, MatchScoreBreakdown } from "../../api/endpoints/jobs";
+import {
+  MatchScoreResponse,
+  MatchScoreBreakdown,
+} from "../../api/endpoints/jobs";
 
 interface MatchScoreBadgeProps {
   jobId: string;
@@ -121,7 +124,6 @@ export const MatchScoreBadge: React.FC<MatchScoreBadgeProps> = ({
         className="rounded-2xl border overflow-hidden"
         style={{ borderColor: color + "40", backgroundColor: bg }}
       >
-
         <button
           type="button"
           onClick={(e) => {
@@ -172,7 +174,6 @@ export const MatchScoreBadge: React.FC<MatchScoreBadgeProps> = ({
           </p>
         </button>
 
-
         {open && (
           <div
             className="border-t px-5 pb-5 pt-4 bg-white/60"
@@ -219,7 +220,6 @@ export const MatchScoreBadge: React.FC<MatchScoreBadgeProps> = ({
         <span>{overallScore}% Match</span>
       </button>
 
-
       {open && (
         <div
           className="absolute left-0 mt-2 z-50 bg-white rounded-2xl shadow-2xl border border-slate-100"
@@ -227,7 +227,6 @@ export const MatchScoreBadge: React.FC<MatchScoreBadgeProps> = ({
           // Prevent any click inside from escaping
           onClick={(e) => e.stopPropagation()}
         >
-
           <div className="flex items-center justify-between px-4 pt-4 pb-2">
             <div>
               <h4 className="text-sm font-extrabold text-slate-900 m-0">
@@ -259,7 +258,6 @@ export const MatchScoreBadge: React.FC<MatchScoreBadgeProps> = ({
           </div>
 
           <div className="px-4 pb-4">
-
             <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden mb-4">
               <div
                 className="h-full rounded-full"
@@ -344,7 +342,9 @@ const ScoreBreakdownPanel: React.FC<BreakdownPanelProps> = ({
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center gap-2">
                 <i
-                  className={`pi ${PILLAR_ICONS[p.key as keyof MatchScoreBreakdown]} text-slate-400`}
+                  className={`pi ${
+                    PILLAR_ICONS[p.key as keyof MatchScoreBreakdown]
+                  } text-slate-400`}
                   style={{ fontSize: "0.7rem" }}
                 />
                 <span className="text-xs font-semibold text-slate-700">
@@ -387,5 +387,3 @@ const ScoreBreakdownPanel: React.FC<BreakdownPanelProps> = ({
     </p>
   </div>
 );
-
-

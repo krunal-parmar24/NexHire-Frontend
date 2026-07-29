@@ -7,7 +7,10 @@ import { TiptapEditor } from "../../components/forms/TiptapEditor";
 import { DynamicFormRenderer } from "../../components/forms/DynamicFormRenderer";
 import { ScreeningQuestion } from "../../types/screeningQuestion";
 import { useCreateJobMutation } from "../../api/hooks/useJobMutations";
-import { JOB_TYPE_OPTIONS, REMOTE_TYPE_OPTIONS } from "../../constants/jobOptions";
+import {
+  JOB_TYPE_OPTIONS,
+  REMOTE_TYPE_OPTIONS,
+} from "../../constants/jobOptions";
 import PublicHeader from "../../components/PublicHeader";
 
 const JobPostingPage: React.FC = () => {
@@ -22,7 +25,6 @@ const JobPostingPage: React.FC = () => {
   const [salaryRange, setSalaryRange] = useState("");
   const [remoteType, setRemoteType] = useState("Onsite");
   const [questions, setQuestions] = useState<ScreeningQuestion[]>([]);
-
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
