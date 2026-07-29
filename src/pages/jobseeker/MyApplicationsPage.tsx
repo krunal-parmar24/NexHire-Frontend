@@ -4,11 +4,18 @@ import {
   useMyApplications,
   useWithdrawApplication,
 } from "../../api/hooks/useApplications";
+import {
+  APPLICATION_STATUS_SEVERITY,
+  WITHDRAWABLE_STATUSES,
+} from "../../constants/applicationStatus";
+import type { ApplicationStatus } from "../../constants/applicationStatus";
 import PublicHeader from "../../components/PublicHeader";
 import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
 import { Skeleton } from "primereact/skeleton";
 import { Tag } from "primereact/tag";
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import type { AxiosError } from "axios";
 
 export default function MyApplicationsPage() {
   const { data, isLoading, isError } = useMyApplications();
@@ -35,51 +42,43 @@ export default function MyApplicationsPage() {
   }, [location]);
 
   const handleWithdraw = (id: string) => {
-    if (window.confirm("Are you sure you want to withdraw this application?")) {
-      withdrawMutation.mutate(id, {
-        onSuccess: () => {
-          toast.current?.show({
-            severity: "success",
-            summary: "Withdrawn",
-            detail: "Application has been withdrawn.",
-            life: 3000,
-          });
-        },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onError: (err: any) => {
-          const msg =
-            err.response?.data?.error?.message ||
-            "Failed to withdraw application";
-          toast.current?.show({
-            severity: "error",
-            summary: "Error",
-            detail: msg,
-            life: 5000,
-          });
-        },
-      });
-    }
+    confirmDialog({
+      message: "Are you sure you want to withdraw this application?",
+      header: "Confirm Withdrawal",
+      icon: "pi pi-exclamation-triangle",
+      acceptClassName: "p-button-danger",
+      accept: () => {
+        withdrawMutation.mutate(id, {
+          onSuccess: () => {
+            toast.current?.show({
+              severity: "success",
+              summary: "Withdrawn",
+              detail: "Application has been withdrawn.",
+              life: 3000,
+            });
+          },
+          onError: (error: Error) => {
+            const err = error as AxiosError<{ error?: { message?: string } }>;
+            const msg =
+              err.response?.data?.error?.message ||
+              "Failed to withdraw application";
+            toast.current?.show({
+              severity: "error",
+              summary: "Error",
+              detail: msg,
+              life: 5000,
+            });
+          },
+        });
+      },
+    });
   };
 
-  const getStatusSeverity = (status: string) => {
-    switch (status) {
-      case "Applied":
-      case "Shortlisted":
-      case "Interview":
-        return "info";
-      case "Hired":
-        return "success";
-      case "Rejected":
-      case "Withdrawn":
-        return "danger";
-      default:
-        return "info";
-    }
-  };
 
   return (
     <div className="min-h-screen bg-slate-50/50 flex flex-col font-sans pb-32">
       <Toast ref={toast} />
+      <ConfirmDialog />
       <PublicHeader />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col gap-10">
@@ -162,7 +161,11 @@ export default function MyApplicationsPage() {
                     </h3>
                     <Tag
                       value={app.status}
-                      severity={getStatusSeverity(app.status)}
+                      severity={
+                        APPLICATION_STATUS_SEVERITY[
+                          app.status as ApplicationStatus
+                        ] ?? "info"
+                      }
                       className="rounded-lg px-4 py-1.5 font-bold text-sm shadow-sm ml-4 shrink-0"
                     />
                   </div>
@@ -179,9 +182,9 @@ export default function MyApplicationsPage() {
                   </div>
 
                   <div className="flex gap-3 w-full sm:w-auto">
-                    {(app.status === "Applied" ||
-                      app.status === "Shortlisted" ||
-                      app.status === "Interview") && (
+                    {WITHDRAWABLE_STATUSES.includes(
+                    app.status as ApplicationStatus
+                  ) && (
                       <Button
                         label="Withdraw"
                         icon="pi pi-times"

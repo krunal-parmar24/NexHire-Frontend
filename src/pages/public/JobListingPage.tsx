@@ -2,13 +2,14 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   useJobsQuery,
-  useSavedJobIdsQuery,
-  useToggleSaveJobMutation,
 } from "../../api/hooks/useJobs";
+import { useJobActions } from "../../api/hooks/useJobActions";
 import { useAuth } from "../../context/AuthContext";
 import PublicHeader from "../../components/PublicHeader";
 import { MatchScoreBadge } from "../../components/jobs/MatchScoreBadge";
 import LoginRegisterModal from "../../components/auth/LoginRegisterModal";
+import { JOB_TYPE_OPTIONS, REMOTE_TYPE_OPTIONS } from "../../constants/jobOptions";
+import { STORAGE_KEYS } from "../../constants/storageKeys";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
@@ -47,17 +48,6 @@ export default function JobListingPage() {
     pageSize,
   });
 
-  const jobTypes = [
-    { label: "Full-time", value: "Full-time" },
-    { label: "Part-time", value: "Part-time" },
-    { label: "Contract", value: "Contract" },
-  ];
-
-  const remoteTypes = [
-    { label: "Remote", value: "Remote" },
-    { label: "Hybrid", value: "Hybrid" },
-    { label: "Onsite", value: "Onsite" },
-  ];
 
   const handleResetFilters = () => {
     setKeyword("");
@@ -72,85 +62,7 @@ export default function JobListingPage() {
     setPageSize(e.rows);
   };
 
-  const handleApply = (jobId: string, event: React.MouseEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (!accessToken) {
-      sessionStorage.setItem(
-        "nexhire_redirect_after_login",
-        `/seeker/apply/${jobId}`
-      );
-      setLoginModalVisible(true);
-      toast.current?.show({
-        severity: "info",
-        summary: "Authentication Required",
-        detail: "Please sign in or register to apply for this job.",
-        life: 3000,
-      });
-    } else {
-      if (role === "JobSeeker") {
-        navigate(`/seeker/apply/${jobId}`);
-      } else {
-        toast.current?.show({
-          severity: "warn",
-          summary: "Action Restricted",
-          detail: "Recruiter accounts cannot apply to jobs.",
-          life: 4000,
-        });
-      }
-    }
-  };
-
-  const { data: savedJobIds = [] } = useSavedJobIdsQuery(!!accessToken);
-  const savedJobsSet = new Set(savedJobIds);
-  const toggleSaveMutation = useToggleSaveJobMutation();
-
-  const handleSave = (jobId: string, event: React.MouseEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (!accessToken) {
-      setLoginModalVisible(true);
-      toast.current?.show({
-        severity: "info",
-        summary: "Authentication Required",
-        detail: "Please sign in or register to save this job.",
-        life: 3000,
-      });
-    } else {
-      if (role === "Recruiter") {
-        toast.current?.show({
-          severity: "warn",
-          summary: "Action Restricted",
-          detail: "Recruiter accounts cannot save jobs.",
-          life: 4000,
-        });
-        return;
-      }
-
-      toggleSaveMutation.mutate(jobId, {
-        onSuccess: (data) => {
-          toast.current?.show({
-            severity: data.isSaved ? "success" : "info",
-            summary: data.isSaved ? "Saved" : "Unsaved",
-            detail: data.isSaved
-              ? "Job saved successfully!"
-              : "Job removed from saved list.",
-            life: 2000,
-          });
-        },
-        onError: () => {
-          toast.current?.show({
-            severity: "error",
-            summary: "Error",
-            detail: "Failed to update saved job status.",
-            life: 3000,
-          });
-        },
-      });
-    }
-  };
+  const { handleApply, handleSave, savedJobsSet, isSaving } = useJobActions(toast, setLoginModalVisible);
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-sans">
@@ -245,7 +157,7 @@ export default function JobListingPage() {
                     setJobType(e.value);
                     setPage(1);
                   }}
-                  options={jobTypes}
+                  options={JOB_TYPE_OPTIONS}
                   placeholder="Any Job Type"
                   showClear
                   className="w-full !rounded-xl !border-slate-200 focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100 !shadow-none"
@@ -263,7 +175,7 @@ export default function JobListingPage() {
                     setRemoteType(e.value);
                     setPage(1);
                   }}
-                  options={remoteTypes}
+                  options={REMOTE_TYPE_OPTIONS}
                   placeholder="Any Workplace"
                   showClear
                   className="w-full !rounded-xl !border-slate-200 focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100 !shadow-none"
@@ -419,7 +331,7 @@ export default function JobListingPage() {
                       />
                       <Button
                         onClick={(e) => handleSave(job.id, e)}
-                        disabled={toggleSaveMutation.isPending}
+                        disabled={isSaving}
                         icon={
                           savedJobsSet.has(job.id)
                             ? "pi pi-bookmark-fill"

@@ -2,13 +2,13 @@ import React, { useState, useRef, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import {
   useJobQuery,
-  useSavedJobIdsQuery,
-  useToggleSaveJobMutation,
 } from "../../api/hooks/useJobs";
+import { useJobActions } from "../../api/hooks/useJobActions";
 import { useAuth } from "../../context/AuthContext";
 import PublicHeader from "../../components/PublicHeader";
 import { MatchScoreBadge } from "../../components/jobs/MatchScoreBadge";
 import LoginRegisterModal from "../../components/auth/LoginRegisterModal";
+import { STORAGE_KEYS } from "../../constants/storageKeys";
 import { Button } from "primereact/button";
 import { Skeleton } from "primereact/skeleton";
 import { Toast } from "primereact/toast";
@@ -16,7 +16,7 @@ import { Toast } from "primereact/toast";
 export default function JobDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { accessToken, role } = useAuth();
+  const { accessToken } = useAuth();
   const toast = useRef<Toast>(null);
 
   // Modal State
@@ -34,81 +34,8 @@ export default function JobDetailPage() {
     }
   }, [job]);
 
-  const handleApply = () => {
-    if (!id) return;
-    if (!accessToken) {
-      sessionStorage.setItem(
-        "nexhire_redirect_after_login",
-        `/seeker/apply/${id}`
-      );
-      setLoginModalVisible(true);
-      toast.current?.show({
-        severity: "info",
-        summary: "Authentication Required",
-        detail: "Please sign in or register to apply for this job.",
-        life: 3000,
-      });
-    } else {
-      if (role === "JobSeeker") {
-        navigate(`/seeker/apply/${id}`);
-      } else {
-        toast.current?.show({
-          severity: "warn",
-          summary: "Action Restricted",
-          detail: "Recruiter accounts cannot apply to jobs.",
-          life: 4000,
-        });
-      }
-    }
-  };
-
-  const { data: savedJobIds = [] } = useSavedJobIdsQuery(!!accessToken);
-  const isSaved = id ? savedJobIds.includes(id) : false;
-  const toggleSaveMutation = useToggleSaveJobMutation();
-
-  const handleSave = () => {
-    if (!id) return;
-    if (!accessToken) {
-      setLoginModalVisible(true);
-      toast.current?.show({
-        severity: "info",
-        summary: "Authentication Required",
-        detail: "Please sign in or register to save this job.",
-        life: 3000,
-      });
-    } else {
-      if (role === "Recruiter") {
-        toast.current?.show({
-          severity: "warn",
-          summary: "Action Restricted",
-          detail: "Recruiter accounts cannot save jobs.",
-          life: 4000,
-        });
-        return;
-      }
-
-      toggleSaveMutation.mutate(id, {
-        onSuccess: (data) => {
-          toast.current?.show({
-            severity: data.isSaved ? "success" : "info",
-            summary: data.isSaved ? "Saved" : "Unsaved",
-            detail: data.isSaved
-              ? "Job saved successfully!"
-              : "Job removed from saved list.",
-            life: 2000,
-          });
-        },
-        onError: () => {
-          toast.current?.show({
-            severity: "error",
-            summary: "Error",
-            detail: "Failed to update saved job status.",
-            life: 3000,
-          });
-        },
-      });
-    }
-  };
+  const { handleApply, handleSave, savedJobsSet, isSaving } = useJobActions(toast, setLoginModalVisible);
+  const isSaved = id ? savedJobsSet.has(id) : false;
 
   const handleMessage = () => {
     if (!accessToken) {
@@ -274,14 +201,14 @@ export default function JobDetailPage() {
                 </h3>
                 <div className="flex flex-col gap-3">
                   <Button
-                    onClick={handleApply}
+                    onClick={(e) => handleApply(id || "", e)}
                     label="Apply for this role"
                     icon="pi pi-bolt"
                     className="w-full !rounded-xl !bg-blue-600 hover:!bg-blue-700 !border-none !text-white font-bold py-3.5 text-base shadow-lg shadow-blue-600/20"
                   />
                   <Button
-                    onClick={handleSave}
-                    disabled={toggleSaveMutation.isPending}
+                    onClick={(e) => handleSave(id || "", e)}
+                    disabled={isSaving}
                     label={isSaved ? "Saved" : "Save Job"}
                     icon={isSaved ? "pi pi-bookmark-fill" : "pi pi-bookmark"}
                     outlined={!isSaved}
@@ -344,8 +271,8 @@ export default function JobDetailPage() {
 
             <div className="flex items-center gap-3 w-full sm:w-auto shrink-0 justify-end">
               <Button
-                onClick={handleSave}
-                disabled={toggleSaveMutation.isPending}
+                onClick={(e) => handleSave(id || "", e)}
+                disabled={isSaving}
                 icon={isSaved ? "pi pi-bookmark-fill" : "pi pi-bookmark"}
                 outlined={!isSaved}
                 className={`!w-12 !h-12 !rounded-xl shrink-0 p-0 ${
@@ -355,7 +282,7 @@ export default function JobDetailPage() {
                 }`}
               />
               <Button
-                onClick={handleApply}
+                onClick={(e) => handleApply(id || "", e)}
                 label="Apply Now"
                 className="!rounded-xl !bg-blue-600 hover:!bg-blue-700 !border-none !text-white font-bold px-8 py-3 shadow-md shadow-blue-600/20 flex-1 sm:flex-none"
               />

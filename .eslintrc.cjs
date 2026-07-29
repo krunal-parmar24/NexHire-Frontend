@@ -20,6 +20,7 @@ module.exports = {
   rules: {
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
+    "@typescript-eslint/no-explicit-any": "error",
   },
   ignorePatterns: ["dist", "build", "node_modules", ".vs", "vite.config.ts"],
 };

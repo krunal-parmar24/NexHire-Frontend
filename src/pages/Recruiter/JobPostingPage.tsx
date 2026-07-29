@@ -6,7 +6,8 @@ import { Button } from "primereact/button";
 import { TiptapEditor } from "../../components/forms/TiptapEditor";
 import { DynamicFormRenderer } from "../../components/forms/DynamicFormRenderer";
 import { ScreeningQuestion } from "../../types/screeningQuestion";
-import { useCreateJobMutation } from "../../queries/useJobMutations";
+import { useCreateJobMutation } from "../../api/hooks/useJobMutations";
+import { JOB_TYPE_OPTIONS, REMOTE_TYPE_OPTIONS } from "../../constants/jobOptions";
 import PublicHeader from "../../components/PublicHeader";
 
 const JobPostingPage: React.FC = () => {
@@ -22,17 +23,6 @@ const JobPostingPage: React.FC = () => {
   const [remoteType, setRemoteType] = useState("Onsite");
   const [questions, setQuestions] = useState<ScreeningQuestion[]>([]);
 
-  const jobTypeOptions = [
-    { label: "Full-time", value: "Full-time" },
-    { label: "Part-time", value: "Part-time" },
-    { label: "Contract", value: "Contract" },
-  ];
-
-  const remoteTypeOptions = [
-    { label: "Onsite", value: "Onsite" },
-    { label: "Hybrid", value: "Hybrid" },
-    { label: "Remote", value: "Remote" },
-  ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,7 +39,7 @@ const JobPostingPage: React.FC = () => {
       },
       {
         onSuccess: () => {
-          navigate("/recruiter/dashboard");
+          navigate("/recruiter");
         },
       }
     );
@@ -133,7 +123,7 @@ const JobPostingPage: React.FC = () => {
                 </label>
                 <Dropdown
                   value={jobType}
-                  options={jobTypeOptions}
+                  options={JOB_TYPE_OPTIONS}
                   onChange={(e) => setJobType(e.value)}
                   className="w-full !rounded-xl !border-slate-200 focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100 !shadow-none"
                 />
@@ -144,7 +134,7 @@ const JobPostingPage: React.FC = () => {
                 </label>
                 <Dropdown
                   value={remoteType}
-                  options={remoteTypeOptions}
+                  options={REMOTE_TYPE_OPTIONS}
                   onChange={(e) => setRemoteType(e.value)}
                   className="w-full !rounded-xl !border-slate-200 focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100 !shadow-none"
                 />
@@ -162,7 +152,7 @@ const JobPostingPage: React.FC = () => {
             <Button
               type="button"
               label="Cancel"
-              onClick={() => navigate("/recruiter/dashboard")}
+              onClick={() => navigate("/recruiter")}
               outlined
               className="!rounded-xl !border-slate-300 !text-slate-700 hover:!bg-slate-50 px-6 py-3 font-bold"
             />

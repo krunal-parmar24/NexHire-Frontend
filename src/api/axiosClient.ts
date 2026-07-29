@@ -1,7 +1,8 @@
-import axios from "axios";
+import axios, { InternalAxiosRequestConfig } from "axios";
+import { API_BASE_URL } from "../constants/config";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:60719",
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -10,7 +11,12 @@ const api = axios.create({
 let isRefreshing = false;
 let refreshPromise: Promise<string | null> | null = null;
 
-api.interceptors.request.use(async (config) => {
+// F-15: Add _retry to request config type
+interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
+  _retry?: boolean;
+}
+
+api.interceptors.request.use(async (config: CustomAxiosRequestConfig) => {
   const token = localStorage.getItem("accessToken");
   if (token && config.headers) {
     config.headers["Authorization"] = `Bearer ${token}`;
@@ -21,7 +27,7 @@ api.interceptors.request.use(async (config) => {
 api.interceptors.response.use(
   (res) => res,
   async (err) => {
-    const originalRequest = err.config;
+    const originalRequest = err.config as CustomAxiosRequestConfig;
     if (err.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       if (!isRefreshing) {

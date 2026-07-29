@@ -1,4 +1,9 @@
-import axiosClient from "../axiosClient";
+import api from "../axiosClient";
+import type {
+  JobListResponse,
+  JobDetailResponse,
+  JobsQueryFilters,
+} from "../../types/job";
 import { ScreeningQuestion } from "../../types/screeningQuestion";
 
 export interface CreateJobRequest {
@@ -18,13 +23,27 @@ export interface JobResponse {
 }
 
 export const createJob = (data: CreateJobRequest): Promise<JobResponse> =>
-  axiosClient.post<JobResponse>("/api/jobs", data).then((r) => r.data);
+  api.post<JobResponse>("/api/jobs", data).then((r) => r.data);
 
 export const updateJob = (
   id: string,
   data: CreateJobRequest
 ): Promise<JobResponse> =>
-  axiosClient.put<JobResponse>(`/api/jobs/${id}`, data).then((r) => r.data);
+  api.put<JobResponse>(`/api/jobs/${id}`, data).then((r) => r.data);
+
+export const getJobsList = (filters: JobsQueryFilters): Promise<JobListResponse> =>
+  api.get<JobListResponse>("/api/jobs", { params: filters }).then((r) => r.data);
+
+export const getJobById = (id: string): Promise<JobDetailResponse> =>
+  api.get<JobDetailResponse>(`/api/jobs/${id}`).then((r) => r.data);
+
+export const getSavedJobIds = (): Promise<string[]> =>
+  api.get<string[]>("/api/jobs/saved").then((r) => r.data);
+
+export const toggleSaveJob = (jobId: string): Promise<{ jobId: string; isSaved: boolean }> =>
+  api
+    .post<{ isSaved: boolean }>(`/api/jobs/${jobId}/save`)
+    .then((r) => ({ jobId, isSaved: r.data.isSaved }));
 
 export interface ApplicantDto {
   applicationId: string;
@@ -38,13 +57,13 @@ export interface ApplicantDto {
 export const getJobApplicants = (
   jobId: string
 ): Promise<{ items: ApplicantDto[] }> =>
-  axiosClient
+  api
     .get<{ items: ApplicantDto[] }>(`/api/jobs/${jobId}/applicants`)
     .then((r) => r.data);
 
-export const getMyJobs = (page = 1, pageSize = 20): Promise<unknown> =>
-  axiosClient
-    .get(`/api/jobs/mine`, { params: { page, pageSize } })
+export const getMyJobsList = (page = 1, pageSize = 20): Promise<JobListResponse> =>
+  api
+    .get<JobListResponse>(`/api/jobs/mine`, { params: { page, pageSize } })
     .then((r) => r.data);
 
 export interface PillarScore {
@@ -67,6 +86,6 @@ export interface MatchScoreResponse {
 }
 
 export const getJobMatchScore = (jobId: string): Promise<MatchScoreResponse> =>
-  axiosClient
+  api
     .get<MatchScoreResponse>(`/api/jobs/${jobId}/match-score`)
     .then((r) => r.data);

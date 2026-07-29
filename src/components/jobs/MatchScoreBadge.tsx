@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useMatchScoreQuery } from "../../api/hooks/useJobs";
 import { useAuth } from "../../context/AuthContext";
-import { MatchScoreResponse } from "../../api/endpoints/jobs";
+import { MatchScoreResponse, MatchScoreBreakdown } from "../../api/endpoints/jobs";
 
 interface MatchScoreBadgeProps {
   jobId: string;
@@ -10,21 +10,21 @@ interface MatchScoreBadgeProps {
   variant?: "inline" | "sidebar";
 }
 
-const PILLAR_LABELS: Record<string, string> = {
+const PILLAR_LABELS: Record<keyof MatchScoreBreakdown, string> = {
   skillsCoverage: "Skills Match",
   experienceFit: "Experience",
   certificationMatch: "Certifications",
   domainTitleMatch: "Role Alignment",
 };
 
-const PILLAR_ICONS: Record<string, string> = {
+const PILLAR_ICONS: Record<keyof MatchScoreBreakdown, string> = {
   skillsCoverage: "pi-code",
   experienceFit: "pi-briefcase",
   certificationMatch: "pi-verified",
   domainTitleMatch: "pi-compass",
 };
 
-function scoreColor(score: number): string {
+function getScoreColor(score: number): string {
   if (score >= 80) return "#22c55e";
   if (score >= 55) return "#f59e0b";
   return "#ef4444";
@@ -92,14 +92,18 @@ export const MatchScoreBadge: React.FC<MatchScoreBadgeProps> = ({
   const { overallScore, breakdown, certificationWeightRedistributed } =
     scoreData;
 
-  const pillars = [
+  const pillars: {
+    key: keyof MatchScoreBreakdown;
+    score: number;
+    weight: number;
+  }[] = [
     { key: "skillsCoverage", ...breakdown.skillsCoverage },
     { key: "experienceFit", ...breakdown.experienceFit },
     { key: "certificationMatch", ...breakdown.certificationMatch },
     { key: "domainTitleMatch", ...breakdown.domainTitleMatch },
   ];
 
-  const color = scoreColor(overallScore);
+  const color = getScoreColor(overallScore);
   const bg = scoreBg(overallScore);
   const label = scoreLabel(overallScore);
 
@@ -334,17 +338,17 @@ const ScoreBreakdownPanel: React.FC<BreakdownPanelProps> = ({
     <div className="flex flex-col gap-3">
       {pillars.map((p) => {
         const isZero = p.weight === 0;
-        const pColor = scoreColor_(p.score);
+        const pColor = getScoreColor(p.score);
         return (
           <div key={p.key} className={isZero ? "opacity-40" : ""}>
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center gap-2">
                 <i
-                  className={`pi ${PILLAR_ICONS[p.key]} text-slate-400`}
+                  className={`pi ${PILLAR_ICONS[p.key as keyof MatchScoreBreakdown]} text-slate-400`}
                   style={{ fontSize: "0.7rem" }}
                 />
                 <span className="text-xs font-semibold text-slate-700">
-                  {PILLAR_LABELS[p.key]}
+                  {PILLAR_LABELS[p.key as keyof MatchScoreBreakdown]}
                 </span>
                 <span className="text-[10px] text-slate-400 font-medium">
                   ({p.weight}%)
@@ -384,8 +388,4 @@ const ScoreBreakdownPanel: React.FC<BreakdownPanelProps> = ({
   </div>
 );
 
-function scoreColor_(score: number): string {
-  if (score >= 80) return "#22c55e";
-  if (score >= 55) return "#f59e0b";
-  return "#ef4444";
-}
+

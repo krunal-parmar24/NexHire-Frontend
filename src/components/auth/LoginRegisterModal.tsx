@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { isAxiosError } from "axios";
 import RoleSelectionCards from "./RoleSelectionCards";
 import api from "../../api/axiosClient";
 import { useAuth } from "../../context/AuthContext";
+import { STORAGE_KEYS } from "../../constants/storageKeys";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
@@ -11,7 +12,7 @@ import { Password } from "primereact/password";
 import { Checkbox } from "primereact/checkbox";
 import { classNames } from "primereact/utils";
 
-interface Props {
+interface LoginRegisterModalProps {
   visible?: boolean;
   onHide?: () => void;
 }
@@ -19,7 +20,7 @@ interface Props {
 export default function LoginRegisterModal({
   visible = true,
   onHide = () => {},
-}: Props) {
+}: LoginRegisterModalProps) {
   const [tab, setTab] = useState<"login" | "register">("login");
   const [selectedRole, setSelectedRole] = useState<"JobSeeker" | "Recruiter">(
     "JobSeeker"
@@ -35,8 +36,8 @@ export default function LoginRegisterModal({
   const navigate = useNavigate();
 
   const handleHide = () => {
-    if (sessionStorage.getItem("nexhire_redirect_after_login")) {
-      sessionStorage.removeItem("nexhire_redirect_after_login");
+    if (sessionStorage.getItem(STORAGE_KEYS.REDIRECT_AFTER_LOGIN)) {
+      sessionStorage.removeItem(STORAGE_KEYS.REDIRECT_AFTER_LOGIN);
       navigate("/");
     }
     onHide();
@@ -50,19 +51,19 @@ export default function LoginRegisterModal({
     }
     if (role === "JobSeeker") {
       const redirectPath = sessionStorage.getItem(
-        "nexhire_redirect_after_login"
+        STORAGE_KEYS.REDIRECT_AFTER_LOGIN
       );
       if (redirectPath) {
-        sessionStorage.removeItem("nexhire_redirect_after_login");
+        sessionStorage.removeItem(STORAGE_KEYS.REDIRECT_AFTER_LOGIN);
         navigate(redirectPath);
       } else {
         navigate("/seeker/applications");
       }
     } else {
       const redirectPath = sessionStorage.getItem(
-        "nexhire_redirect_after_login"
+        STORAGE_KEYS.REDIRECT_AFTER_LOGIN
       );
-      sessionStorage.removeItem("nexhire_redirect_after_login");
+      sessionStorage.removeItem(STORAGE_KEYS.REDIRECT_AFTER_LOGIN);
       navigate("/recruiter", {
         state: { showRecruiterApplyToast: !!redirectPath },
       });
@@ -90,7 +91,7 @@ export default function LoginRegisterModal({
       );
       handleSuccess(data.role, data.onboardingCompleted);
     } catch (err) {
-      if (axios.isAxiosError(err)) {
+      if (isAxiosError(err)) {
         setError(
           err.response?.data?.error?.message ||
             (typeof err.response?.data?.error === "string"
@@ -132,7 +133,7 @@ export default function LoginRegisterModal({
       );
       handleSuccess(data.role, data.onboardingCompleted);
     } catch (err) {
-      if (axios.isAxiosError(err)) {
+      if (isAxiosError(err)) {
         setError(
           err.response?.data?.error?.message ||
             (typeof err.response?.data?.error === "string"
@@ -164,7 +165,7 @@ export default function LoginRegisterModal({
       );
       handleSuccess(data.role, data.onboardingCompleted);
     } catch (err) {
-      if (axios.isAxiosError(err)) {
+      if (isAxiosError(err)) {
         setError(
           err.response?.data?.error?.message ||
             (typeof err.response?.data?.error === "string"

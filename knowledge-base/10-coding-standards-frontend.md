@@ -32,8 +32,9 @@
 ## 6. TypeScript Conventions
 
 - `strict: true` in `tsconfig.json`; no implicit `any`.
+- `@typescript-eslint/no-explicit-any: error` in ESLint config. Zero-tolerance for `any` casting.
 - Shared types (e.g., the `screening_questions` / `answers` field-type map) live under `types/` and must mirror the backend DTO shape exactly.
-- Prefer discriminated unions for the 6 screening-question field types (`text | single-select | multi-select | file | yes-no | numeric`) so the renderer's `switch` statement is exhaustively type-checked.
+- Prefer discriminated unions for the 6 screening-question field types (`text | single-select | multi-select | file upload | yes/no | numeric`) so the renderer's `switch` statement is exhaustively type-checked.
 
 ## 7. Naming Conventions (Frontend Rows)
 
@@ -67,9 +68,9 @@ Git/commit conventions are **shared and authoritative in the Backend knowledge b
 
 ## Implementation Checklist
 
-- [ ] Enable TypeScript `strict: true` in `tsconfig.json`
-- [ ] Create shared `types/screeningQuestion.ts` discriminated union for the 6 field types
-- [ ] Add ESLint + Prettier config enforcing the naming conventions above
-- [ ] Ensure all server-state fetching goes through React Query hooks under `queries/`
-- [ ] Ensure client/session state goes through `AuthContext`/`sessionStore`, never ad-hoc component state for cross-route data
+- [x] Enable TypeScript `strict: true` in `tsconfig.json`
+- [x] Create shared `types/screeningQuestion.ts` discriminated union for the 6 field types
+- [x] Add ESLint + Prettier config enforcing the naming conventions above (including `no-explicit-any`)
+- [x] **Server state**: React Query hooks under `api/hooks/`, which in turn call pure Axios functions under `api/endpoints/`. Never inline raw `api.get/post` inside a hook or fetch directly inside a component with `useEffect` + `fetch`.
+- [x] **Client/session state**: `AuthContext` (localStorage-backed) — no Zustand `sessionStore` despite KB spec; no ad-hoc component state for cross-route data
 - [ ] Adopt Conventional Commits format for all commits/PRs (per the shared convention referenced above)
